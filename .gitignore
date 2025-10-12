@@ -99,3 +99,4 @@ InitTestScene*.unity*
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
 Packages/com.ptc.vuforia.engine-*.tgz
+Assets/Editor/Migration/*.tgz
