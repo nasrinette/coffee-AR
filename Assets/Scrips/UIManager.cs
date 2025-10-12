@@ -8,11 +8,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject instructionsPanel;
     [SerializeField] GameObject scanCupPanel;
     [SerializeField] GameObject addEspressoPanel;
+    //[SerializeField] GameObject addIngredientPanel;
 
     [Header("Tracking")]
     public ObserverBehaviour cupObserver;           //cup target
+    public ObserverBehaviour espressoObserver;
     [SerializeField] float lostDebounce = 0.5f;     // seconds to wait before treating as lost
     bool isCupVisible;
+    bool isEspressoVisible;
     float lostTimer;
     void Start() => ShowMain();
     void Update()
@@ -24,17 +27,29 @@ public class UIManager : MonoBehaviour
             if (lostTimer <= 0f)
                 ShowScanCup();
         }
+
+        if (!isEspressoVisible && lostTimer > 0f)
+        {
+            lostTimer -= Time.deltaTime;
+            if (lostTimer <= 0f)
+                ShowAddEspresso();
+
+        }
     }
     void OnEnable()
     {
         if (cupObserver != null)
             cupObserver.OnTargetStatusChanged += OnCupStatusChanged;
+        if (espressoObserver != null)
+            espressoObserver.OnTargetStatusChanged += OnEspressoAdded;
     }
 
     void OnDisable()
     {
         if (cupObserver != null)
             cupObserver.OnTargetStatusChanged -= OnCupStatusChanged;
+        if (espressoObserver != null)
+            espressoObserver.OnTargetStatusChanged -= OnEspressoAdded;
     }
 
     public void ShowMain()
@@ -54,6 +69,11 @@ public class UIManager : MonoBehaviour
         instructionsPanel.SetActive(false);
         scanCupPanel.SetActive(true);
     }
+    public void ShowAddEspresso()
+    {
+        scanCupPanel.SetActive(false);
+        addEspressoPanel.SetActive(true);
+    }
 
     void OnCupStatusChanged(ObserverBehaviour ob, TargetStatus status)
     {
@@ -64,16 +84,38 @@ public class UIManager : MonoBehaviour
             isCupVisible = true;
             lostTimer = 0f;
             Debug.Log("Cup found");
-            addEspressoPanel.SetActive(true);
-            scanCupPanel.SetActive(false);
+            ShowAddEspresso();
+            //addEspressoPanel.SetActive(true);
+            //scanCupPanel.SetActive(false);
         }
         else
         {
             isCupVisible = false;
             Debug.Log("Cup not found");
             lostTimer = lostDebounce; // start debounce countdown before showing scan UI
-            addEspressoPanel.SetActive(false);
-            scanCupPanel.SetActive(true); // Moved to Update() after debounce
+            ShowScanCup();
+            //addEspressoPanel.SetActive(false);
+            //scanCupPanel.SetActive(true); // Moved to Update() after debounce
+        }
+    }
+
+    void OnEspressoAdded(ObserverBehaviour ob, TargetStatus status)
+    {
+        bool tracked = status.Status == Status.TRACKED || status.Status == Status.EXTENDED_TRACKED;
+
+        if (tracked)
+        {
+            isEspressoVisible = true;
+            lostTimer = 0f;
+            Debug.Log("Esp found");
+         
+        }
+        else
+        {
+            isEspressoVisible = false;
+            Debug.Log("Esp not found");
+            lostTimer = lostDebounce; // start debounce countdown before showing scan UI
+        
         }
     }
 }
