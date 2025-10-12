@@ -53,7 +53,7 @@ public class Wobble : MonoBehaviour
         lastPos = transform.position;
         lastRot = transform.rotation.eulerAngles;
 
-        Debug.Log($"WobbleX: {wobbleAmountX}, WobbleZ: {wobbleAmountZ}");
+        // Debug.Log($"WobbleX: {wobbleAmountX}, WobbleZ: {wobbleAmountZ}");
     }
 
 

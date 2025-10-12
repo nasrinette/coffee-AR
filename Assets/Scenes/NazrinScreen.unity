@@ -373,7 +373,7 @@ GameObject:
   - component: {fileID: 80731321}
   - component: {fileID: 80731324}
   - component: {fileID: 80731323}
-  - component: {fileID: 80731322}
+  - component: {fileID: 80731325}
   m_Layer: 0
   m_Name: Vanilla Target
   m_TagString: Untagged
@@ -396,25 +396,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1195515795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &80731322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 80731320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 80731324}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: vanilla
-  mDatasetName: Vuforia/coffee-AR.xml
-  mCastedBehaviour: {fileID: 80731324}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &80731323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -485,7 +466,26 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 80731322}
+  mPreview: {fileID: 80731325}
+--- !u!114 &80731325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 80731320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 80731324}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: vanilla
+  mDatasetName: Vuforia/coffee-AR.xml
+  mCastedBehaviour: {fileID: 80731324}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &113683229
 GameObject:
   m_ObjectHideFlags: 0
@@ -778,7 +778,7 @@ GameObject:
   - component: {fileID: 177738605}
   - component: {fileID: 177738608}
   - component: {fileID: 177738607}
-  - component: {fileID: 177738606}
+  - component: {fileID: 177738609}
   m_Layer: 0
   m_Name: Ice target
   m_TagString: Untagged
@@ -801,25 +801,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1986276962}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &177738606
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 177738604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 177738608}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: ice
-  mDatasetName: Vuforia/coffee-AR.xml
-  mCastedBehaviour: {fileID: 177738608}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &177738607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -890,7 +871,26 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 177738606}
+  mPreview: {fileID: 177738609}
+--- !u!114 &177738609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177738604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 177738608}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: ice
+  mDatasetName: Vuforia/coffee-AR.xml
+  mCastedBehaviour: {fileID: 177738608}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &236655102
 GameObject:
   m_ObjectHideFlags: 0
@@ -902,7 +902,7 @@ GameObject:
   - component: {fileID: 236655103}
   - component: {fileID: 236655106}
   - component: {fileID: 236655105}
-  - component: {fileID: 236655104}
+  - component: {fileID: 236655107}
   m_Layer: 0
   m_Name: Hot Water Target
   m_TagString: Untagged
@@ -925,25 +925,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1986276962}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &236655104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 236655102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 236655106}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: hot_water
-  mDatasetName: Vuforia/coffee-AR.xml
-  mCastedBehaviour: {fileID: 236655106}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &236655105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1014,7 +995,26 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 236655104}
+  mPreview: {fileID: 236655107}
+--- !u!114 &236655107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236655102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 236655106}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: hot_water
+  mDatasetName: Vuforia/coffee-AR.xml
+  mCastedBehaviour: {fileID: 236655106}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &255364461
 GameObject:
   m_ObjectHideFlags: 0
@@ -1372,7 +1372,7 @@ GameObject:
   - component: {fileID: 322652690}
   - component: {fileID: 322652693}
   - component: {fileID: 322652692}
-  - component: {fileID: 322652691}
+  - component: {fileID: 322652694}
   m_Layer: 0
   m_Name: F Milk Target
   m_TagString: Untagged
@@ -1395,25 +1395,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1986276962}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &322652691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 322652689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 322652693}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: frothed-milk
-  mDatasetName: Vuforia/coffee-AR.xml
-  mCastedBehaviour: {fileID: 322652693}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &322652692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1484,7 +1465,26 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 322652691}
+  mPreview: {fileID: 322652694}
+--- !u!114 &322652694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322652689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 322652693}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: frothed-milk
+  mDatasetName: Vuforia/coffee-AR.xml
+  mCastedBehaviour: {fileID: 322652693}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &324442743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1708,7 +1708,7 @@ GameObject:
   - component: {fileID: 348859286}
   - component: {fileID: 348859289}
   - component: {fileID: 348859288}
-  - component: {fileID: 348859287}
+  - component: {fileID: 348859290}
   m_Layer: 0
   m_Name: Chocolate Target
   m_TagString: Untagged
@@ -1731,25 +1731,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1195515795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &348859287
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 348859285}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 348859289}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: choco_syrup
-  mDatasetName: Vuforia/coffee-AR.xml
-  mCastedBehaviour: {fileID: 348859289}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &348859288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1820,7 +1801,26 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 348859287}
+  mPreview: {fileID: 348859290}
+--- !u!114 &348859290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348859285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 348859289}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: choco_syrup
+  mDatasetName: Vuforia/coffee-AR.xml
+  mCastedBehaviour: {fileID: 348859289}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &413547329
 GameObject:
   m_ObjectHideFlags: 0
@@ -1855,7 +1855,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -89.1, y: -133.1}
+  m_AnchoredPosition: {x: -89.1, y: -133.09998}
   m_SizeDelta: {x: 462.1461, y: 68.319}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &413547331
@@ -2064,7 +2064,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -174, y: -117.8}
+  m_AnchoredPosition: {x: -174, y: -117.80005}
   m_SizeDelta: {x: 300, y: 68.319}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &581503865
@@ -2338,6 +2338,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!4 &616359791 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+  m_PrefabInstance: {fileID: 977188201}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &616881343
 GameObject:
   m_ObjectHideFlags: 0
@@ -2631,6 +2636,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: coffee_black
       objectReference: {fileID: 0}
+    - target: {fileID: 7213194253944375926, guid: 8221c6178a10ce14c977146d6f23a703, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8217139771193310030, guid: 8221c6178a10ce14c977146d6f23a703, type: 3}
       propertyPath: m_LocalScale.x
       value: 47.810394
@@ -2702,6 +2711,7 @@ GameObject:
   m_Component:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
+  - component: {fileID: 705507996}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -2786,6 +2796,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &705507996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705507993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &764139787
 GameObject:
   m_ObjectHideFlags: 0
@@ -3720,6 +3753,84 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 934859409}
   m_CullTransparentMesh: 1
+--- !u!1001 &977188201
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2058615743}
+    m_Modifications:
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.0336
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.6533494
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.75705653
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 261.589
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049281805628491767, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342161927351580367, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_Name
+      value: coffee_black Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342161927351580367, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 291791375597525690, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1b29afc7cf9c88042942fee4ef5e9407, type: 3}
 --- !u!1 &1038603380
 GameObject:
   m_ObjectHideFlags: 0
@@ -3788,9 +3899,9 @@ Canvas:
   m_GameObject: {fileID: 1038603380}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 1068987837}
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -3958,7 +4069,7 @@ GameObject:
   - component: {fileID: 1069973579}
   - component: {fileID: 1069973582}
   - component: {fileID: 1069973581}
-  - component: {fileID: 1069973580}
+  - component: {fileID: 1069973583}
   m_Layer: 0
   m_Name: Espresso Target
   m_TagString: Untagged
@@ -3981,25 +4092,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1986276962}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1069973580
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1069973578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 1069973582}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: espresso
-  mDatasetName: Vuforia/coffee-AR.xml
-  mCastedBehaviour: {fileID: 1069973582}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &1069973581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4070,7 +4162,26 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1069973580}
+  mPreview: {fileID: 1069973583}
+--- !u!114 &1069973583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1069973578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 1069973582}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: espresso
+  mDatasetName: Vuforia/coffee-AR.xml
+  mCastedBehaviour: {fileID: 1069973582}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &1130123667
 GameObject:
   m_ObjectHideFlags: 0
@@ -4161,7 +4272,7 @@ GameObject:
   - component: {fileID: 1146255724}
   - component: {fileID: 1146255727}
   - component: {fileID: 1146255726}
-  - component: {fileID: 1146255725}
+  - component: {fileID: 1146255728}
   m_Layer: 0
   m_Name: S Milk Target
   m_TagString: Untagged
@@ -4184,25 +4295,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1986276962}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1146255725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1146255723}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 1146255727}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: steamed_milk
-  mDatasetName: Vuforia/coffee-AR.xml
-  mCastedBehaviour: {fileID: 1146255727}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &1146255726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4273,7 +4365,26 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1146255725}
+  mPreview: {fileID: 1146255728}
+--- !u!114 &1146255728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146255723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 1146255727}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: steamed_milk
+  mDatasetName: Vuforia/coffee-AR.xml
+  mCastedBehaviour: {fileID: 1146255727}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &1164641073
 GameObject:
   m_ObjectHideFlags: 0
@@ -5371,7 +5482,7 @@ GameObject:
   - component: {fileID: 1405214899}
   - component: {fileID: 1405214902}
   - component: {fileID: 1405214901}
-  - component: {fileID: 1405214900}
+  - component: {fileID: 1405214903}
   m_Layer: 0
   m_Name: Pumkin
   m_TagString: Untagged
@@ -5394,25 +5505,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1195515795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1405214900
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1405214898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 1405214902}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: pumkin
-  mDatasetName: Vuforia/coffee-AR.xml
-  mCastedBehaviour: {fileID: 1405214902}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &1405214901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5483,7 +5575,26 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1405214900}
+  mPreview: {fileID: 1405214903}
+--- !u!114 &1405214903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1405214898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 1405214902}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: pumkin
+  mDatasetName: Vuforia/coffee-AR.xml
+  mCastedBehaviour: {fileID: 1405214902}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &1408251583
 GameObject:
   m_ObjectHideFlags: 0
@@ -5645,7 +5756,7 @@ GameObject:
   - component: {fileID: 1482123492}
   - component: {fileID: 1482123495}
   - component: {fileID: 1482123494}
-  - component: {fileID: 1482123493}
+  - component: {fileID: 1482123496}
   m_Layer: 0
   m_Name: Cinnamon Target
   m_TagString: Untagged
@@ -5668,25 +5779,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1195515795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1482123493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1482123491}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 1482123495}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: cinnamon
-  mDatasetName: Vuforia/coffee-AR.xml
-  mCastedBehaviour: {fileID: 1482123495}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &1482123494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5757,7 +5849,26 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1482123493}
+  mPreview: {fileID: 1482123496}
+--- !u!114 &1482123496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482123491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 1482123495}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: cinnamon
+  mDatasetName: Vuforia/coffee-AR.xml
+  mCastedBehaviour: {fileID: 1482123495}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1001 &1491691894
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6285,7 +6396,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -217.43, y: -108.54}
+  m_AnchoredPosition: {x: -217.43, y: -108.54004}
   m_SizeDelta: {x: 300, y: 68.319}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1528574465
@@ -6400,7 +6511,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1650346326
 Transform:
   m_ObjectHideFlags: 0
@@ -6410,7 +6521,7 @@ Transform:
   m_GameObject: {fileID: 1650346325}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2824.2134, y: 2382.5476, z: -24.3612}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6554,7 +6665,7 @@ GameObject:
   - component: {fileID: 1803460238}
   - component: {fileID: 1803460241}
   - component: {fileID: 1803460240}
-  - component: {fileID: 1803460239}
+  - component: {fileID: 1803460242}
   m_Layer: 0
   m_Name: Caramel Target
   m_TagString: Untagged
@@ -6577,25 +6688,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1195515795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1803460239
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1803460237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 1803460241}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: caramel
-  mDatasetName: Vuforia/coffee-AR.xml
-  mCastedBehaviour: {fileID: 1803460241}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &1803460240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6666,7 +6758,26 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1803460239}
+  mPreview: {fileID: 1803460242}
+--- !u!114 &1803460242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803460237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 1803460241}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: caramel
+  mDatasetName: Vuforia/coffee-AR.xml
+  mCastedBehaviour: {fileID: 1803460241}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &1827606936
 GameObject:
   m_ObjectHideFlags: 0
@@ -6757,7 +6868,7 @@ GameObject:
   - component: {fileID: 1892168860}
   - component: {fileID: 1892168863}
   - component: {fileID: 1892168862}
-  - component: {fileID: 1892168861}
+  - component: {fileID: 1892168864}
   m_Layer: 0
   m_Name: Whipped Cream
   m_TagString: Untagged
@@ -6780,25 +6891,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1986276962}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1892168861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1892168859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 1892168863}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: whipped_cream
-  mDatasetName: Vuforia/coffee-AR.xml
-  mCastedBehaviour: {fileID: 1892168863}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &1892168862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6869,7 +6961,26 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1892168861}
+  mPreview: {fileID: 1892168864}
+--- !u!114 &1892168864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892168859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 1892168863}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: whipped_cream
+  mDatasetName: Vuforia/coffee-AR.xml
+  mCastedBehaviour: {fileID: 1892168863}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!224 &1915151566 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2369611650262540227, guid: 24053421acebfd8489545cc49bf096a2, type: 3}
@@ -7107,7 +7218,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1986276962
 Transform:
   m_ObjectHideFlags: 0
@@ -7667,10 +7778,11 @@ Transform:
   m_GameObject: {fileID: 2058615742}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2239.2134, y: -1116.5476, z: 24.3612}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 616359791}
   - {fileID: 1517972703}
   m_Father: {fileID: 1650346326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
