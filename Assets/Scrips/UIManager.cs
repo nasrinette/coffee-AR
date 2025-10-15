@@ -1,122 +1,299 @@
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections.Generic;
 using Vuforia;
 
 public class UIManager : MonoBehaviour
 {
+    // Singleton instance
+    public static UIManager Instance { get; private set; }
+
     [Header("UI Panels")]
-    [SerializeField] GameObject mainPanel;
-    [SerializeField] GameObject instructionsPanel;
-    [SerializeField] GameObject scanCupPanel;
-    [SerializeField] GameObject addEspressoPanel;
-    //[SerializeField] GameObject addIngredientPanel;
+    [SerializeField] private GameObject homePanel;
+    [SerializeField] private GameObject instructionPanel;
+    [SerializeField] private GameObject scanCupPanel;
+    [SerializeField] private GameObject addEspressoPanel;
+    [SerializeField] private GameObject pickIngredientPanel;
 
-    [Header("Tracking")]
-    public ObserverBehaviour cupObserver;           //cup target
-    public ObserverBehaviour espressoObserver;
-    [SerializeField] float lostDebounce = 0.5f;     // seconds to wait before treating as lost
-    bool isCupVisible;
-    bool isEspressoVisible;
-    float lostTimer;
-    void Start() => ShowMain();
-    void Update()
+    [Header("Vuforia Targets")]
+    [SerializeField] private ObserverBehaviour coffeeCupTarget;
+    [SerializeField] private ObserverBehaviour espressoTarget;
+
+    [Header("Distance Settings")]
+    [SerializeField] private float addIngredientThreshold = 0.15f; // Distance in meters (15cm)
+
+    // Boolean to track detections
+    private bool isCoffeeCupDetected = false;
+    private bool isEspressoDetected = false;
+    private bool isEspressoAdded = false;
+
+    // List of added ingredients
+    private List<string> addedIngredients = new List<string>();
+
+    public bool IsCoffeeCupDetected => isCoffeeCupDetected;
+    public bool IsEspressoDetected => isEspressoDetected;
+    public List<string> AddedIngredients => addedIngredients;
+
+    private void Awake()
     {
-        // Handle delayed "lost" to avoid flicker
-        if (!isCupVisible && lostTimer > 0f)
+        // Singleton pattern
+        if (Instance == null)
         {
-            lostTimer -= Time.deltaTime;
-            if (lostTimer <= 0f)
-                ShowScanCup();
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
+
+    private void Start()
+    {
+        // Show only the home panel at start
+        ShowHomePanel();
+
+        // Enable multiple target tracking
+        VuforiaConfiguration.Instance.Vuforia.MaxSimultaneousImageTargets = 2;
+
+        // Register Vuforia event handlers for coffee cup
+        if (coffeeCupTarget != null)
+        {
+            coffeeCupTarget.OnTargetStatusChanged += OnCoffeeCupStatusChanged;
+        }
+        else
+        {
+            Debug.LogError("Coffee Cup Target is not assigned!");
         }
 
-        if (!isEspressoVisible && lostTimer > 0f)
+        // Register Vuforia event handlers for espresso
+        if (espressoTarget != null)
         {
-            lostTimer -= Time.deltaTime;
-            if (lostTimer <= 0f)
-                ShowAddEspresso();
-
+            espressoTarget.OnTargetStatusChanged += OnEspressoStatusChanged;
+        }
+        else
+        {
+            Debug.LogError("Espresso Target is not assigned!");
         }
     }
-    void OnEnable()
+
+    private void Update()
     {
-        if (cupObserver != null)
-            cupObserver.OnTargetStatusChanged += OnCupStatusChanged;
-        if (espressoObserver != null)
-            espressoObserver.OnTargetStatusChanged += OnEspressoAdded;
+        // Check distance between coffee cup and espresso when both are detected
+        if (isCoffeeCupDetected && isEspressoDetected && !isEspressoAdded && addEspressoPanel.activeSelf)
+        {
+            CheckIngredientDistance();
+        }
     }
 
-    void OnDisable()
+    private void OnDestroy()
     {
-        if (cupObserver != null)
-            cupObserver.OnTargetStatusChanged -= OnCupStatusChanged;
-        if (espressoObserver != null)
-            espressoObserver.OnTargetStatusChanged -= OnEspressoAdded;
+        // Unregister event handlers when destroyed
+        if (coffeeCupTarget != null)
+        {
+            coffeeCupTarget.OnTargetStatusChanged -= OnCoffeeCupStatusChanged;
+        }
+        if (espressoTarget != null)
+        {
+            espressoTarget.OnTargetStatusChanged -= OnEspressoStatusChanged;
+        }
     }
 
-    public void ShowMain()
+    // ===== UI PANEL MANAGEMENT =====
+
+    // Show Home Panel
+    public void ShowHomePanel()
     {
-        mainPanel.SetActive(true);
-        instructionsPanel.SetActive(false);
+        HideAllPanels();
+        homePanel.SetActive(true);
     }
 
-    public void ShowInstructions()
+    // Open Instructions Panel (called from Instructions button on Home Panel)
+    public void OpenInstructionsPanel()
     {
-        mainPanel.SetActive(false);
-        instructionsPanel.SetActive(true);
+        HideAllPanels();
+        instructionPanel.SetActive(true);
     }
 
-    public void ShowScanCup()
+    // Open Scan Cup Panel (called from Start button on Instructions Panel)
+    public void OpenScanCupPanel()
     {
-        instructionsPanel.SetActive(false);
+        HideAllPanels();
         scanCupPanel.SetActive(true);
     }
-    public void ShowAddEspresso()
+
+    // Open Add Espresso Panel (will be called after cup is scanned)
+    public void OpenAddEspressoPanel()
     {
-        scanCupPanel.SetActive(false);
+        HideAllPanels();
         addEspressoPanel.SetActive(true);
     }
 
-    void OnCupStatusChanged(ObserverBehaviour ob, TargetStatus status)
+    // Open Pick Ingredient Panel (called after ingredient is added)
+    public void OpenPickIngredientPanel()
     {
-        bool tracked = status.Status == Status.TRACKED || status.Status == Status.EXTENDED_TRACKED;
+        HideAllPanels();
+        pickIngredientPanel.SetActive(true);
+    }
 
-        if (tracked)
+    // Helper method to hide all panels
+    private void HideAllPanels()
+    {
+        homePanel.SetActive(false);
+        instructionPanel.SetActive(false);
+        scanCupPanel.SetActive(false);
+        addEspressoPanel.SetActive(false);
+        pickIngredientPanel.SetActive(false);
+    }
+
+    // ===== VUFORIA COFFEE CUP TRACKING =====
+
+    // Called when coffee cup target tracking status changes
+    private void OnCoffeeCupStatusChanged(ObserverBehaviour behaviour, TargetStatus targetStatus)
+    {
+        // Only track when scan cup panel or add espresso panel is active
+        if (!scanCupPanel.activeSelf && !addEspressoPanel.activeSelf)
+            return;
+
+        if (targetStatus.Status == Status.TRACKED || 
+            targetStatus.Status == Status.EXTENDED_TRACKED)
         {
-            isCupVisible = true;
-            lostTimer = 0f;
-            Debug.Log("Cup found");
-            ShowAddEspresso();
-            //addEspressoPanel.SetActive(true);
-            //scanCupPanel.SetActive(false);
+            OnCoffeeCupFound();
         }
         else
         {
-            isCupVisible = false;
-            Debug.Log("Cup not found");
-            lostTimer = lostDebounce; // start debounce countdown before showing scan UI
-            ShowScanCup();
-            //addEspressoPanel.SetActive(false);
-            //scanCupPanel.SetActive(true); // Moved to Update() after debounce
+            OnCoffeeCupLost();
         }
     }
 
-    void OnEspressoAdded(ObserverBehaviour ob, TargetStatus status)
+    // Called when coffee cup target is found and tracked
+    private void OnCoffeeCupFound()
     {
-        bool tracked = status.Status == Status.TRACKED || status.Status == Status.EXTENDED_TRACKED;
-
-        if (tracked)
+        isCoffeeCupDetected = true;
+        
+        // Log that target is found
+        Debug.Log("Coffee Cup Target FOUND!");
+        
+        // Log position
+        Vector3 position = coffeeCupTarget.transform.position;
+        Debug.Log($"Coffee Cup Position: {position}");
+        
+        // Switch to Add Espresso Panel if currently in Scan Cup Panel
+        if (scanCupPanel.activeSelf)
         {
-            isEspressoVisible = true;
-            lostTimer = 0f;
-            Debug.Log("Esp found");
-         
+            OpenAddEspressoPanel();
+        }
+    }
+
+    // Called when coffee cup target is lost
+    private void OnCoffeeCupLost()
+    {
+        isCoffeeCupDetected = false;
+        
+        Debug.Log("Coffee Cup Target LOST!");
+        
+        // Switch back to Scan Cup Panel only if in Add Espresso Panel and espresso not added yet
+        if (addEspressoPanel.activeSelf && !isEspressoAdded)
+        {
+            OpenScanCupPanel();
+        }
+    }
+
+    // ===== VUFORIA ESPRESSO TRACKING =====
+
+    // Called when espresso target tracking status changes
+    private void OnEspressoStatusChanged(ObserverBehaviour behaviour, TargetStatus targetStatus)
+    {
+        // Only track when add espresso panel is active
+        if (!addEspressoPanel.activeSelf)
+            return;
+
+        if (targetStatus.Status == Status.TRACKED || 
+            targetStatus.Status == Status.EXTENDED_TRACKED)
+        {
+            OnEspressoFound();
         }
         else
         {
-            isEspressoVisible = false;
-            Debug.Log("Esp not found");
-            lostTimer = lostDebounce; // start debounce countdown before showing scan UI
-        
+            OnEspressoLost();
         }
+    }
+
+    // Called when espresso target is found and tracked
+    private void OnEspressoFound()
+    {
+        isEspressoDetected = true;
+        
+        // Log that target is found
+        Debug.Log("Espresso Target FOUND!");
+        
+        // Log position
+        Vector3 position = espressoTarget.transform.position;
+        Debug.Log($"Espresso Position: {position}");
+
+        // Stay in Add Espresso Panel (no panel change)
+        Debug.Log("Both Coffee Cup and Espresso are now visible!");
+    }
+
+    // Called when espresso target is lost
+    private void OnEspressoLost()
+    {
+        isEspressoDetected = false;
+        
+        Debug.Log("Espresso Target LOST!");
+
+        // Stay in Add Espresso Panel (no panel change)
+    }
+
+    // ===== INGREDIENT DISTANCE CHECKING =====
+
+    private void CheckIngredientDistance()
+    {
+        // Calculate distance between coffee cup and espresso
+        float distance = Vector3.Distance(coffeeCupTarget.transform.position, espressoTarget.transform.position);
+        
+        Debug.Log($"Distance between Cup and Espresso: {distance:F3}m");
+
+        // Check if espresso is close enough to the cup
+        if (distance <= addIngredientThreshold)
+        {
+            AddEspresso();
+        }
+    }
+
+    private void AddEspresso()
+    {
+        if (isEspressoAdded)
+            return;
+
+        isEspressoAdded = true;
+        
+        // Add espresso to the ingredients list
+        addedIngredients.Add("Espresso");
+        
+        Debug.Log("✓ ESPRESSO ADDED to the cup!");
+        Debug.Log($"Current Ingredients: {string.Join(", ", addedIngredients)}");
+
+        // Switch to Pick Ingredient Panel
+        OpenPickIngredientPanel();
+    }
+
+    // ===== PUBLIC HELPER METHODS =====
+
+    // Public method to check if cup is currently detected
+    public bool IsCupInView()
+    {
+        return isCoffeeCupDetected;
+    }
+
+    // Public method to check if espresso is currently detected
+    public bool IsEspressoInView()
+    {
+        return isEspressoDetected;
+    }
+
+    // Public method to get the list of added ingredients
+    public void PrintAddedIngredients()
+    {
+        Debug.Log($"Added Ingredients ({addedIngredients.Count}): {string.Join(", ", addedIngredients)}");
     }
 }
-
