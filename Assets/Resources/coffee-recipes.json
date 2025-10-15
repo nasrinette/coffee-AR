@@ -18,62 +18,62 @@
     {
       "name": "Americano",
       "ingredients": ["Espresso", "Hot Water"],
-      "color": "#6F4E37"  
+      "color": { "r": 61, "g": 49, "b": 40 }
     },
     {
       "name": "Latte",
       "ingredients": ["Espresso", "Steamed Milk"],
-      "color": "#C8A165" 
+      "color": { "r": 194, "g": 153, "b": 107 }
     },
     {
       "name": "Pumpkin Spice Latte",
       "ingredients": ["Espresso", "Steamed Milk", "Pumpkin Spice Syrup"],
-      "color": "#D2691E"  
+      "color": { "r": 181, "g": 106, "b": 53 }
     },
     {
       "name": "Cappuccino",
       "ingredients": ["Espresso", "Steamed Milk", "Frothed Milk"],
-      "color": "#D2B48C" 
+      "color": { "r": 148, "g": 111, "b": 84 }
     },
     {
       "name": "Cinnamon Cappuccino",
       "ingredients": ["Espresso", "Steamed Milk", "Frothed Milk", "Cinnamon"],
-      "color": "#A0522D" 
+      "color": { "r": 148, "g": 111, "b": 84 }
     },
     {
       "name": "Mocha",
       "ingredients": ["Espresso", "Chocolate Syrup", "Steamed Milk"],
-      "color": "#4B3832"  
+      "color": { "r": 75, "g": 56, "b": 50 }
     },
     {
       "name": "Caffè Mocha Deluxe",
       "ingredients": ["Espresso", "Chocolate Syrup", "Steamed Milk", "Whipped Cream"],
-      "color": "#3E2723" 
+      "color": { "r": 75, "g": 56, "b": 50 }
     },
     {
       "name": "Iced Latte",
       "ingredients": ["Espresso", "Ice", "Milk"],
-      "color": "#E6D3B3"  
+      "color": { "r": 235, "g": 198, "b": 157 }
     },
     {
       "name": "Iced Vanilla Latte",
       "ingredients": ["Espresso", "Ice", "Milk", "Vanilla Syrup"],
-      "color": "#F3E5AB"  
+      "color": { "r": 235, "g": 198, "b": 157 }
     },
     {
       "name": "Iced Caramel Latte",
       "ingredients": ["Espresso", "Ice", "Milk", "Caramel Syrup"],
-      "color": "#FFD59A" 
+      "color": { "r": 224, "g": 175, "b": 114 }
     },
     {
       "name": "Cold Brew Style Latte",
       "ingredients": ["Espresso", "Ice", "Cold Foam"],
-      "color": "#A89F91" 
+      "color": { "r": 224, "g": 198, "b": 159 }
     },
     {
       "name": "Caramel Macchiato",
       "ingredients": ["Espresso", "Whipped Cream", "Caramel Syrup"],
-      "color": "#F5DEB3"  
+      "color": { "r": 204, "g": 159, "b": 104 }
     }
   ]
 }

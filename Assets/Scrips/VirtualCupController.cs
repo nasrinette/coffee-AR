@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class LiquidController : MonoBehaviour
 {
@@ -9,22 +10,16 @@ public class LiquidController : MonoBehaviour
     
     [Header("Fill Settings")]
     [Range(0f, 1f)] public float fillLevel = 0f;
-    public float fillSpeed = 1f; // Speed of fill animation
+    public float fillSpeed = 1f;
     
-    [Header("Ingredient Colors")]
-    public Color coffeeColor = new Color(0.2f, 0.1f, 0f);
-    public Color milkColor = new Color(1f, 1f, 0.9f);
-    public Color chocolateColor = new Color(0.3f, 0.15f, 0.05f);
-    public Color vanillaColor = new Color(1f, 0.95f, 0.8f);
+    [Header("Recipe Data")]
+    public TextAsset recipeJsonFile;
     
-    [Header("Recipe Colors")]
-    public Color latteColor = new Color(0.76f, 0.6f, 0.42f); // Coffee + Milk
-    public Color mochaColor = new Color(0.4f, 0.25f, 0.15f); // Coffee + Chocolate
-    public Color hotChocolateColor = new Color(0.45f, 0.3f, 0.2f); // Milk + Chocolate
-    public Color vanillaLatteColor = new Color(0.85f, 0.75f, 0.6f); // Coffee + Milk + Vanilla
-    
-    private HashSet<string> ingredientsAdded = new HashSet<string>();
+    [HideInInspector] public List<string> coreIngredients = new List<string>();
+    private List<Recipe> recipes = new List<Recipe>();
+    private List<string> ingredientsAdded = new List<string>(); // Changed to List to maintain order
     private bool isAnimating = false;
+    private string currentRecipeName = "None";
     
     void Start()
     {
@@ -33,15 +28,41 @@ public class LiquidController : MonoBehaviour
         {
             liquidMaterial = renderer.material;
         }
+        
+        LoadRecipes();
         UpdateShader();
+    }
+    
+    void OnValidate()
+    {
+        LoadRecipes();
+    }
+    
+    private void LoadRecipes()
+    {
+        if (recipeJsonFile == null) return;
+        
+        try
+        {
+            RecipeList recipeList = JsonUtility.FromJson<RecipeList>(recipeJsonFile.text);
+            coreIngredients = recipeList.coreIngredients;
+            recipes = recipeList.recipes;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Failed to load recipes: " + e.Message);
+        }
     }
     
     public void AddIngredient(string ingredientName)
     {
-        if (isAnimating) return; // Prevent adding while animating
+        if (isAnimating) return;
         
-        string ingredient = ingredientName.ToLower();
-        ingredientsAdded.Add(ingredient);
+        // Don't add duplicate ingredients
+        if (!ingredientsAdded.Contains(ingredientName))
+        {
+            ingredientsAdded.Add(ingredientName);
+        }
         
         float targetFill = Mathf.Clamp01(fillLevel + 0.25f);
         StartCoroutine(AnimateFill(targetFill));
@@ -75,63 +96,59 @@ public class LiquidController : MonoBehaviour
         liquidMaterial.SetFloat("_Fill", fillLevel);
         liquidMaterial.SetColor("_topColor", currentColor);
         liquidMaterial.SetColor("_sideColor", currentColor * 0.8f);
+        
+        Debug.Log($"Current Recipe: {currentRecipeName} | Ingredients: {string.Join(", ", ingredientsAdded)} | Color: RGB({currentColor.r * 255:F0}, {currentColor.g * 255:F0}, {currentColor.b * 255:F0})");
     }
     
     private Color GetRecipeColor()
     {
-        if (ingredientsAdded.Count == 0) return Color.clear;
+        if (ingredientsAdded.Count == 0)
+        {
+            currentRecipeName = "None";
+            return Color.clear;
+        }
         
-        bool hasCoffee = ingredientsAdded.Contains("coffee");
-        bool hasMilk = ingredientsAdded.Contains("milk");
-        bool hasChocolate = ingredientsAdded.Contains("chocolate");
-        bool hasVanilla = ingredientsAdded.Contains("vanilla");
+        int ingredientCount = ingredientsAdded.Count;
         
-        // Complex recipes (3+ ingredients)
-        if (hasCoffee && hasMilk && hasVanilla)
-            return vanillaLatteColor;
+        // Find recipes that match the current ingredient count
+        List<Recipe> matchingRecipes = recipes.FindAll(r => r.ingredients.Count == ingredientCount);
         
-        if (hasCoffee && hasMilk && hasChocolate)
-            return Color.Lerp(mochaColor, latteColor, 0.5f); // Chocolate mocha latte
+        // Check for exact match with current ingredients
+        foreach (Recipe recipe in matchingRecipes)
+        {
+            // Check if all recipe ingredients are in our added ingredients (order doesn't matter)
+            bool allMatch = recipe.ingredients.All(ing => ingredientsAdded.Contains(ing));
+            
+            if (allMatch)
+            {
+                currentRecipeName = recipe.name;
+                return recipe.color.ToColor();
+            }
+        }
         
-        if (hasMilk && hasChocolate && hasVanilla)
-            return Color.Lerp(hotChocolateColor, vanillaColor, 0.3f); // Vanilla hot chocolate
+        // No exact match found for current ingredient count
+        currentRecipeName = "Custom Mix (" + ingredientCount + " ingredients)";
         
-        // Two ingredient recipes
-        if (hasCoffee && hasMilk)
-            return latteColor;
+        // Fallback: try to find a recipe with fewer ingredients that matches what we have
+        for (int i = ingredientCount - 1; i >= 1; i--)
+        {
+            List<Recipe> smallerRecipes = recipes.FindAll(r => r.ingredients.Count == i);
+            
+            foreach (Recipe recipe in smallerRecipes)
+            {
+                bool allMatch = recipe.ingredients.All(ing => ingredientsAdded.Contains(ing));
+                
+                if (allMatch)
+                {
+                    currentRecipeName = recipe.name + " + extras";
+                    return recipe.color.ToColor();
+                }
+            }
+        }
         
-        if (hasCoffee && hasChocolate)
-            return mochaColor;
-        
-        if (hasMilk && hasChocolate)
-            return hotChocolateColor;
-        
-        if (hasCoffee && hasVanilla)
-            return Color.Lerp(coffeeColor, vanillaColor, 0.3f);
-        
-        if (hasMilk && hasVanilla)
-            return Color.Lerp(milkColor, vanillaColor, 0.5f);
-        
-        // Single ingredients
-        if (hasCoffee) return coffeeColor;
-        if (hasMilk) return milkColor;
-        if (hasChocolate) return chocolateColor;
-        if (hasVanilla) return vanillaColor;
-        
-        return Color.white;
+        // Ultimate fallback - return a neutral color
+        return new Color(0.8f, 0.7f, 0.6f);
     }
-    
-    [ContextMenu("Add Milk")]
-    public void AddMilk() => AddIngredient("milk");
-    
-    [ContextMenu("Add Coffee")]
-    public void AddCoffee() => AddIngredient("coffee");
-    
-    [ContextMenu("Add Chocolate")]
-    public void AddChocolate() => AddIngredient("chocolate");
-    
-    [ContextMenu("Add Vanilla")]
-    public void AddVanilla() => AddIngredient("vanilla");
     
     [ContextMenu("Reset Cup")]
     public void ResetCup()
@@ -140,6 +157,39 @@ public class LiquidController : MonoBehaviour
         ingredientsAdded.Clear();
         fillLevel = 0f;
         isAnimating = false;
+        currentRecipeName = "None";
         UpdateShader();
     }
 }
+
+#if UNITY_EDITOR
+[UnityEditor.CustomEditor(typeof(LiquidController))]
+public class LiquidControllerEditor : UnityEditor.Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        LiquidController controller = (LiquidController)target;
+        
+        if (controller.recipeJsonFile != null && controller.coreIngredients.Count > 0)
+        {
+            UnityEditor.EditorGUILayout.Space(10);
+            UnityEditor.EditorGUILayout.LabelField("Add Ingredients", UnityEditor.EditorStyles.boldLabel);
+            
+            foreach (var ingredient in controller.coreIngredients)
+            {
+                if (GUILayout.Button("Add " + ingredient))
+                {
+                    controller.AddIngredient(ingredient);
+                }
+            }
+            
+            UnityEditor.EditorGUILayout.Space(5);
+            if (GUILayout.Button("Reset Cup", GUILayout.Height(30)))
+            {
+                controller.ResetCup();
+            }
+        }
+    }
+}
+#endif
