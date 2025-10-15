@@ -53,8 +53,13 @@ public class LiquidController : MonoBehaviour
             Debug.LogError("Failed to load recipes: " + e.Message);
         }
     }
+
+    public List<Recipe> getRecipes()
+    {
+        return recipes;
+    }
     
-    public void AddIngredient(string ingredientName)
+    public void FillIngredient(string ingredientName)
     {
         if (isAnimating) return;
         
@@ -180,7 +185,7 @@ public class LiquidControllerEditor : UnityEditor.Editor
             {
                 if (GUILayout.Button("Add " + ingredient))
                 {
-                    controller.AddIngredient(ingredient);
+                    controller.FillIngredient(ingredient);
                 }
             }
             

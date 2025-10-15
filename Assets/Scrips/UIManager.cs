@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Vuforia;
+using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -13,10 +15,21 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject scanCupPanel;
     [SerializeField] private GameObject addEspressoPanel;
     [SerializeField] private GameObject pickIngredientPanel;
+    [SerializeField] private GameObject suggestionsPanel;
 
     [Header("Vuforia Targets")]
     [SerializeField] private ObserverBehaviour coffeeCupTarget;
     [SerializeField] private ObserverBehaviour espressoTarget;
+    [SerializeField] private ObserverBehaviour creamTarget;
+    [SerializeField] private ObserverBehaviour milkTarget;
+    [SerializeField] private ObserverBehaviour iceTarget;
+    [SerializeField] private ObserverBehaviour pumkinTarget;
+    [SerializeField] private ObserverBehaviour chocolateTarget;
+    [SerializeField] private ObserverBehaviour vanillaTarget;
+    [SerializeField] private ObserverBehaviour caramelTarget;
+    [SerializeField] private ObserverBehaviour cinnamonTarget;
+    
+
 
     [Header("Distance Settings")]
     [SerializeField] private float addIngredientThreshold = 0.15f; // Distance in meters (15cm)
@@ -32,6 +45,13 @@ public class UIManager : MonoBehaviour
     public bool IsCoffeeCupDetected => isCoffeeCupDetected;
     public bool IsEspressoDetected => isEspressoDetected;
     public List<string> AddedIngredients => addedIngredients;
+
+    public LiquidController liquidController; // set in inspector
+
+    public GameObject recipeSuggestionContent;
+    public GameObject recipeButtonPrefab;
+
+    public GameObject recipeDetailsContainer;
 
     private void Awake()
     {
@@ -81,7 +101,30 @@ public class UIManager : MonoBehaviour
         // Check distance between coffee cup and espresso when both are detected
         if (isCoffeeCupDetected && isEspressoDetected && !isEspressoAdded && addEspressoPanel.activeSelf)
         {
-            CheckIngredientDistance();
+            CheckIngredientDistance(espressoTarget);
+        }
+        //my code
+        if(addedIngredients.Count >= 1)
+        {
+            // Check distance for all other ingredients (assuming they are also ObserverBehaviours in the scene)
+            //check if they're found and it cant be AR camera       
+            
+
+
+            var allTargets = FindObjectsOfType<ObserverBehaviour>();
+            foreach (var target in allTargets)
+            {
+                if (target == coffeeCupTarget || target == espressoTarget || target.TargetName== "ARCamera"|| target.TargetName== "DeviceObserver")
+                    continue; // skip cup and espresso and other non-ingredient targets
+
+                // Only check if the target is tracked or extended tracked
+                if (target.TargetStatus.Status == Status.TRACKED || target.TargetStatus.Status == Status.EXTENDED_TRACKED)
+                {
+                    //Debug.Log($"Checking distance for target: {target.TargetName}");
+                    // Assuming other targets represent different ingredients
+                    CheckIngredientDistance(target);
+                }
+            }
         }
     }
 
@@ -134,6 +177,11 @@ public class UIManager : MonoBehaviour
         HideAllPanels();
         pickIngredientPanel.SetActive(true);
     }
+    public void OpenSuggesttionsPanel()
+    {
+        HideAllPanels();
+        suggestionsPanel.SetActive(true);
+    }
 
     // Helper method to hide all panels
     private void HideAllPanels()
@@ -143,6 +191,7 @@ public class UIManager : MonoBehaviour
         scanCupPanel.SetActive(false);
         addEspressoPanel.SetActive(false);
         pickIngredientPanel.SetActive(false);
+        suggestionsPanel.SetActive(false);
     }
 
     // ===== VUFORIA COFFEE CUP TRACKING =====
@@ -246,35 +295,141 @@ public class UIManager : MonoBehaviour
 
     // ===== INGREDIENT DISTANCE CHECKING =====
 
-    private void CheckIngredientDistance()
+
+    //my code: added target
+    private Dictionary<string, string> markerToIngredient = new Dictionary<string, string>
+{
+    { "cinnamon", "Cinnamon" },
+    { "whipped_cream", "Whipped Cream" },
+    { "pumkin", "Pumpkin Spice Syrup" },
+    { "choco_syrup", "Chocolate Syrup" },
+    { "caramel", "Caramel Syrup" },
+    { "vanilla", "Vanilla Syrup" },
+    { "ice", "Ice" },
+    { "frothed-milk", "Frothed Milk" },
+    { "steamed_milk", "Steamed Milk" },
+    { "hot_water", "Hot Water" }
+};
+
+    private void CheckIngredientDistance(ObserverBehaviour target)
     {
         // Calculate distance between coffee cup and espresso
-        float distance = Vector3.Distance(coffeeCupTarget.transform.position, espressoTarget.transform.position);
+        float distance = Vector3.Distance(coffeeCupTarget.transform.position, target.transform.position);
         
-        Debug.Log($"Distance between Cup and Espresso: {distance:F3}m");
+        Debug.Log($"Distance between Cup and {target}: {distance:F3}m");
 
-        // Check if espresso is close enough to the cup
+        // Check if target is close enough to the cup
         if (distance <= addIngredientThreshold)
         {
-            AddEspresso();
+            if(addedIngredients.Count == 0)
+                AddEspresso();
+            else if (markerToIngredient.TryGetValue(target.TargetName, out string ingredientName) && !addedIngredients.Contains(ingredientName))
+            {
+                Debug.Log($"IMP Target Name: {target.TargetName} maps to Ingredient: {ingredientName}");
+                AddIngredient(ingredientName);
+            }
+            else
+            {
+                Debug.Log("Ingredient already exists or marker not mapped");
+            }
+
+
+
         }
     }
-
-    private void AddEspresso()
+    private void AddIngredient(string ingredient)
     {
-        if (isEspressoAdded)
-            return;
+        addedIngredients.Add(ingredient);
+        Debug.Log($"ADDED to the cup! {string.Join(", ", ingredient)}");
+        Debug.Log($"IMP Current Ingredients: {string.Join(", ", addedIngredients)}");
+        liquidController.FillIngredient(ingredient);
+        if (ingredient!= "Espresso") SuggestRecipe();
+
+
+    }
+
+    private void AddEspresso() //TODO change to AddIngredient(string ingredient)
+    {
+        //if (isEspressoAdded)
+        //    return;
 
         isEspressoAdded = true;
-        
-        // Add espresso to the ingredients list
-        addedIngredients.Add("Espresso");
-        
-        Debug.Log("✓ ESPRESSO ADDED to the cup!");
-        Debug.Log($"Current Ingredients: {string.Join(", ", addedIngredients)}");
+
+        AddIngredient("Espresso");
+
+        //SuggestRecipe();
+
+        //// Add espresso to the ingredients list
+        //addedIngredients.Add("Espresso");
+
+        //Debug.Log("✓ ESPRESSO ADDED to the cup!");
+        //Debug.Log($"Current Ingredients: {string.Join(", ", addedIngredients)}");
+
+        //liquidController.AddIngredient("Espresso");
+
+
 
         // Switch to Pick Ingredient Panel
         OpenPickIngredientPanel();
+
+    }
+
+    private void SuggestRecipe()
+    {
+        OpenSuggesttionsPanel();
+       
+
+        // Suggest recipes based on current ingredients
+        var suggestedRecipes = IngredientsToRecipes();
+       
+        recipeSuggestionContent.transform.DetachChildren(); // Clear previous suggestions,,, hopefully
+        foreach (var recipe in suggestedRecipes)
+        {
+            //Debug.Log($"Imp Suggested Recipes: {string.Join(", ", recipe.name)}");
+            GameObject buttonObj = Instantiate(recipeButtonPrefab, recipeSuggestionContent.transform);
+            buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = recipe.name;
+            var button = buttonObj.GetComponent<Button>();
+            if (button != null)
+            {
+                button.onClick.AddListener(() =>
+                {
+                    // Show recipe details when button is clicked
+                    recipeDetailsContainer.SetActive(true);
+                    var detailsText = recipeDetailsContainer.GetComponentInChildren<TextMeshProUGUI>();
+                    if (detailsText != null)
+                    {
+                        detailsText.text = $"{string.Join("\n ", recipe.ingredients)}";
+                    }
+                });
+            }
+        }
+
+    }
+
+    private List<Recipe> IngredientsToRecipes()
+    {
+        //recipieNames.Clear();
+        List<Recipe> sugestionRecipieList = new List<Recipe>();
+      
+        var recipes = liquidController.getRecipes();
+        foreach (var recipe in recipes)
+        {
+            int count = 0;
+            foreach (var ingredient in recipe.ingredients)
+            {
+                if (addedIngredients.Contains(ingredient))
+                {
+                    count++;
+                }
+            }
+            if (count>=2) //TODO: change to count>=2 to have 1 espresso and other more
+            { 
+                
+                sugestionRecipieList.Add(recipe);
+            }
+        }
+        return sugestionRecipieList;
+
     }
 
     // ===== PUBLIC HELPER METHODS =====
