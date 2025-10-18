@@ -6,11 +6,10 @@
     "Frothed Milk",
     "Chocolate Syrup",
     "Ice",
-    "Milk",
     "Vanilla Syrup",
     "Caramel Syrup",
     "Pumpkin Spice Syrup",
-    "Cold Foam",
+    "Whipped Cream",
     "Whipped Cream",
     "Cinnamon"
   ],
@@ -47,27 +46,32 @@
     },
     {
       "name": "Caffè Mocha Deluxe",
-      "ingredients": ["Espresso", "Chocolate Syrup", "Steamed Milk", "Whipped Cream"],
+      "ingredients": [
+        "Espresso",
+        "Chocolate Syrup",
+        "Steamed Milk",
+        "Whipped Cream"
+      ],
       "color": { "r": 75, "g": 56, "b": 50 }
     },
     {
       "name": "Iced Latte",
-      "ingredients": ["Espresso", "Ice", "Milk"],
+      "ingredients": ["Espresso", "Ice", "Frothed Milk"],
       "color": { "r": 235, "g": 198, "b": 157 }
     },
     {
       "name": "Iced Vanilla Latte",
-      "ingredients": ["Espresso", "Ice", "Milk", "Vanilla Syrup"],
+      "ingredients": ["Espresso", "Ice", "Frothed Milk", "Vanilla Syrup"],
       "color": { "r": 235, "g": 198, "b": 157 }
     },
     {
       "name": "Iced Caramel Latte",
-      "ingredients": ["Espresso", "Ice", "Milk", "Caramel Syrup"],
+      "ingredients": ["Espresso", "Ice", "Frothed Milk", "Caramel Syrup"],
       "color": { "r": 224, "g": 175, "b": 114 }
     },
     {
       "name": "Cold Brew Style Latte",
-      "ingredients": ["Espresso", "Ice", "Cold Foam"],
+      "ingredients": ["Espresso", "Ice", "Whipped Cream"],
       "color": { "r": 224, "g": 198, "b": 159 }
     },
     {

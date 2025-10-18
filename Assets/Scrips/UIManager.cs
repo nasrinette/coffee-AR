@@ -46,12 +46,19 @@ public class UIManager : MonoBehaviour
     public bool IsEspressoDetected => isEspressoDetected;
     public List<string> AddedIngredients => addedIngredients;
 
+    [Header("Other Settings")]
     public LiquidController liquidController; // set in inspector
 
     public GameObject recipeSuggestionContent;
     public GameObject recipeButtonPrefab;
 
     public GameObject recipeDetailsContainer;
+
+    [SerializeField] private GameObject resetButton;
+    [SerializeField] private GameObject notFoundText;
+
+
+
 
     private void Awake()
     {
@@ -348,44 +355,66 @@ public class UIManager : MonoBehaviour
 
     }
 
-    private void AddEspresso() //TODO change to AddIngredient(string ingredient)
-    {
-        //if (isEspressoAdded)
-        //    return;
-
+    private void AddEspresso() 
+    {   
         isEspressoAdded = true;
-
         AddIngredient("Espresso");
-
-        //SuggestRecipe();
-
-        //// Add espresso to the ingredients list
-        //addedIngredients.Add("Espresso");
-
-        //Debug.Log("✓ ESPRESSO ADDED to the cup!");
-        //Debug.Log($"Current Ingredients: {string.Join(", ", addedIngredients)}");
-
-        //liquidController.AddIngredient("Espresso");
-
-
-
         // Switch to Pick Ingredient Panel
         OpenPickIngredientPanel();
 
+    }
+    private List<Recipe> IngredientsToRecipes()
+    {
+        List<Recipe> suggestionRecipeList = new List<Recipe>();
+        var recipes = liquidController.getRecipes();
+
+        foreach (var recipe in recipes)
+        {
+            // Only suggest recipes that contain ALL current ingredients
+            bool allMatch = true;
+            foreach (var ingredient in addedIngredients)
+            {
+                if (!recipe.ingredients.Contains(ingredient))
+                {
+                    allMatch = false;
+                    break;
+                }
+            }
+            if (allMatch)
+            {
+                suggestionRecipeList.Add(recipe);
+            }
+        }
+        return suggestionRecipeList;
     }
 
     private void SuggestRecipe()
     {
         OpenSuggesttionsPanel();
-       
 
         // Suggest recipes based on current ingredients
         var suggestedRecipes = IngredientsToRecipes();
-       
-        recipeSuggestionContent.transform.DetachChildren(); // Clear previous suggestions,,, hopefully
+
+        recipeSuggestionContent.transform.DetachChildren(); // Clear previous suggestions
+
+        if (suggestedRecipes.Count == 0)
+        {
+            if (resetButton != null) resetButton.SetActive(true);
+            if (notFoundText != null) notFoundText.SetActive(true);
+
+            return;
+
+          
+        }
+        else
+        {
+            // Hide reset button and not found text if previously shown
+            if (resetButton != null) resetButton.SetActive(false);
+            if (notFoundText != null) notFoundText.SetActive(false);
+        }
+
         foreach (var recipe in suggestedRecipes)
         {
-            //Debug.Log($"Imp Suggested Recipes: {string.Join(", ", recipe.name)}");
             GameObject buttonObj = Instantiate(recipeButtonPrefab, recipeSuggestionContent.transform);
             buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = recipe.name;
             var button = buttonObj.GetComponent<Button>();
@@ -403,34 +432,32 @@ public class UIManager : MonoBehaviour
                 });
             }
         }
-
     }
-
-    private List<Recipe> IngredientsToRecipes()
+    public void ResetToPickIngredient()
     {
-        //recipieNames.Clear();
-        List<Recipe> sugestionRecipieList = new List<Recipe>();
-      
-        var recipes = liquidController.getRecipes();
-        foreach (var recipe in recipes)
-        {
-            int count = 0;
-            foreach (var ingredient in recipe.ingredients)
-            {
-                if (addedIngredients.Contains(ingredient))
-                {
-                    count++;
-                }
-            }
-            if (count>=2) //TODO: change to count>=2 to have 1 espresso and other more
-            { 
-                
-                sugestionRecipieList.Add(recipe);
-            }
-        }
-        return sugestionRecipieList;
+        // Clear all ingredients and add Espresso back
+        addedIngredients.Clear();
+        if (liquidController != null)
+            liquidController.ResetCup();
+        HideAllPanels();
+        AddEspresso();
+    }
+    public void GoHomePanel()
+    {
+        // Reset detection and state variables
+        isEspressoAdded = false;
+        addedIngredients.Clear();
+
+        // Reset cup contents and visuals
+        if (liquidController != null)
+            liquidController.ResetCup();
+
+        // Hide all panels and show home panel
+        HideAllPanels();
+        homePanel.SetActive(true);
 
     }
+
 
     // ===== PUBLIC HELPER METHODS =====
 
