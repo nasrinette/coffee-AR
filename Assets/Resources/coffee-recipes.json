@@ -1,48 +1,130 @@
 {
-  "coreIngredients": [
-    "Espresso",
-    "Hot Water",
-    "Steamed Milk",
-    "Frothed Milk",
-    "Chocolate Syrup",
-    "Ice",
-    "Vanilla Syrup",
-    "Caramel Syrup",
-    "Pumpkin Spice Syrup",
-    "Whipped Cream",
-    "Whipped Cream",
-    "Cinnamon"
+  "ingredients": [
+    {
+      "name": "Espresso",
+      "color": {
+        "r": 59,
+        "g": 43,
+        "b": 34
+      }
+    },
+    {
+      "name": "Hot Water",
+      "color": {
+        "r": 220,
+        "g": 220,
+        "b": 220
+      }
+    },
+    {
+      "name": "Steamed Milk",
+      "color": {
+        "r": 255,
+        "g": 250,
+        "b": 240
+      }
+    },
+    {
+      "name": "Milk",
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 250
+      }
+    },
+    {
+      "name": "Chocolate Syrup",
+      "color": {
+        "r": 94,
+        "g": 60,
+        "b": 32
+      }
+    },
+    {
+      "name": "Ice",
+      "color": {
+        "r": 240,
+        "g": 250,
+        "b": 255
+      }
+    },
+    {
+      "name": "Vanilla Syrup",
+      "color": {
+        "r": 245,
+        "g": 235,
+        "b": 215
+      }
+    },
+    {
+      "name": "Caramel Syrup",
+      "color": {
+        "r": 180,
+        "g": 120,
+        "b": 60
+      }
+    },
+    {
+      "name": "Pumpkin Spice Syrup",
+      "color": {
+        "r": 200,
+        "g": 100,
+        "b": 40
+      }
+    },
+    {
+      "name": "Whipped Cream",
+      "color": {
+        "r": 255,
+        "g": 250,
+        "b": 245
+      }
+    },
+    {
+      "name": "Cinnamon",
+      "color": {
+        "r": 140,
+        "g": 80,
+        "b": 50
+      }
+    }
   ],
   "recipes": [
     {
       "name": "Americano",
-      "ingredients": ["Espresso", "Hot Water"],
-      "color": { "r": 61, "g": 49, "b": 40 }
+      "ingredients": ["Espresso", "Hot Water"]
     },
     {
       "name": "Latte",
-      "ingredients": ["Espresso", "Steamed Milk"],
-      "color": { "r": 194, "g": 153, "b": 107 }
+      "ingredients": ["Espresso", "Steamed Milk", "Milk"]
+    },
+    {
+      "name": "Latte Macchiato",
+      "ingredients": ["Espresso", "Steamed Milk", "Milk", "Whipped Cream"]
+    },
+    {
+      "name": "Vanilla Latte",
+      "ingredients": ["Espresso", "Steamed Milk", "Milk", "Vanilla Syrup"]
+    },
+    {
+      "name": "Caramel Latte",
+      "ingredients": ["Espresso", "Steamed Milk", "Milk", "Caramel Syrup"]
     },
     {
       "name": "Pumpkin Spice Latte",
-      "ingredients": ["Espresso", "Steamed Milk", "Pumpkin Spice Syrup"],
-      "color": { "r": 181, "g": 106, "b": 53 }
+      "ingredients": ["Espresso", "Steamed Milk", "Pumpkin Spice Syrup"]
     },
     {
       "name": "Cappuccino",
-      "ingredients": ["Espresso", "Steamed Milk", "Frothed Milk"],
-      "color": { "r": 148, "g": 111, "b": 84 }
+      "ingredients": ["Espresso", "Steamed Milk"]
     },
     {
       "name": "Cinnamon Cappuccino",
-      "ingredients": ["Espresso", "Steamed Milk", "Frothed Milk", "Cinnamon"],
-      "color": { "r": 148, "g": 111, "b": 84 }
+      "ingredients": ["Espresso", "Milk", "Cinnamon"]
     },
     {
       "name": "Mocha",
-      "ingredients": ["Espresso", "Chocolate Syrup", "Steamed Milk"],
-      "color": { "r": 75, "g": 56, "b": 50 }
+      "ingredients": ["Espresso", "Chocolate Syrup", "Steamed Milk"]
     },
     {
       "name": "Caffè Mocha Deluxe",
@@ -51,33 +133,45 @@
         "Chocolate Syrup",
         "Steamed Milk",
         "Whipped Cream"
-      ],
-      "color": { "r": 75, "g": 56, "b": 50 }
+      ]
     },
     {
       "name": "Iced Latte",
-      "ingredients": ["Espresso", "Ice", "Frothed Milk"],
-      "color": { "r": 235, "g": 198, "b": 157 }
+      "ingredients": ["Espresso", "Ice", "Milk", "Steamed Milk"]
     },
     {
       "name": "Iced Vanilla Latte",
-      "ingredients": ["Espresso", "Ice", "Frothed Milk", "Vanilla Syrup"],
-      "color": { "r": 235, "g": 198, "b": 157 }
+      "ingredients": [
+        "Espresso",
+        "Ice",
+        "Milk",
+        "Steamed Milk",
+        "Vanilla Syrup"
+      ]
     },
     {
       "name": "Iced Caramel Latte",
-      "ingredients": ["Espresso", "Ice", "Frothed Milk", "Caramel Syrup"],
-      "color": { "r": 224, "g": 175, "b": 114 }
+      "ingredients": [
+        "Espresso",
+        "Ice",
+        "Milk",
+        "Steamed Milk",
+        "Caramel Syrup"
+      ]
     },
     {
       "name": "Cold Brew Style Latte",
-      "ingredients": ["Espresso", "Ice", "Whipped Cream"],
-      "color": { "r": 224, "g": 198, "b": 159 }
+      "ingredients": [
+        "Espresso",
+        "Ice",
+        "Whipped Cream",
+        "Steamed Milk",
+        "Milk"
+      ]
     },
     {
       "name": "Caramel Macchiato",
-      "ingredients": ["Espresso", "Whipped Cream", "Caramel Syrup"],
-      "color": { "r": 204, "g": 159, "b": 104 }
+      "ingredients": ["Espresso", "Whipped Cream", "Caramel Syrup", "Milk"]
     }
   ]
 }

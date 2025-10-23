@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
 
 
     [Header("Distance Settings")]
-    [SerializeField] private float addIngredientThreshold = 0.15f; // Distance in meters (15cm)
+    [SerializeField] private float addIngredientThreshold = 0.25f; // Distance in meters (15cm)
 
     // Boolean to track detections
     private bool isCoffeeCupDetected = false;
@@ -308,12 +308,12 @@ public class UIManager : MonoBehaviour
 {
     { "cinnamon", "Cinnamon" },
     { "whipped_cream", "Whipped Cream" },
-    { "pumkin", "Pumpkin Spice Syrup" },
+    { "pumpkin", "Pumpkin Spice Syrup" },
     { "choco_syrup", "Chocolate Syrup" },
     { "caramel", "Caramel Syrup" },
     { "vanilla", "Vanilla Syrup" },
     { "ice", "Ice" },
-    { "frothed-milk", "Frothed Milk" },
+    { "milk", "Milk" },
     { "steamed_milk", "Steamed Milk" },
     { "hot_water", "Hot Water" }
 };
@@ -389,59 +389,89 @@ public class UIManager : MonoBehaviour
     }
 
     private void SuggestRecipe()
+{
+    OpenSuggesttionsPanel();
+
+    // Make sure recipe content is active
+    if (recipeSuggestionContent != null)
     {
-        OpenSuggesttionsPanel();
+        recipeSuggestionContent.SetActive(true);
+    }
 
-        // Suggest recipes based on current ingredients
-        var suggestedRecipes = IngredientsToRecipes();
+    // Suggest recipes based on current ingredients
+    var suggestedRecipes = IngredientsToRecipes();
 
-        recipeSuggestionContent.transform.DetachChildren(); // Clear previous suggestions
+    recipeSuggestionContent.transform.DetachChildren(); // Clear previous suggestions
 
-        if (suggestedRecipes.Count == 0)
+    if (suggestedRecipes.Count == 0)
+    {
+        if (resetButton != null) resetButton.SetActive(true);
+        if (notFoundText != null) notFoundText.SetActive(true);
+        if (recipeDetailsContainer != null) recipeDetailsContainer.SetActive(false);
+
+        return;
+    }
+    else
+    {
+        // Hide reset button and not found text if previously shown
+        if (resetButton != null) resetButton.SetActive(false);
+        if (notFoundText != null) notFoundText.SetActive(false);
+    }
+
+    foreach (var recipe in suggestedRecipes)
+    {
+        GameObject buttonObj = Instantiate(recipeButtonPrefab, recipeSuggestionContent.transform);
+        buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = recipe.name;
+        var button = buttonObj.GetComponent<Button>();
+        if (button != null)
         {
-            if (resetButton != null) resetButton.SetActive(true);
-            if (notFoundText != null) notFoundText.SetActive(true);
-
-            return;
-
-          
-        }
-        else
-        {
-            // Hide reset button and not found text if previously shown
-            if (resetButton != null) resetButton.SetActive(false);
-            if (notFoundText != null) notFoundText.SetActive(false);
-        }
-
-        foreach (var recipe in suggestedRecipes)
-        {
-            GameObject buttonObj = Instantiate(recipeButtonPrefab, recipeSuggestionContent.transform);
-            buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = recipe.name;
-            var button = buttonObj.GetComponent<Button>();
-            if (button != null)
+            button.onClick.AddListener(() =>
             {
-                button.onClick.AddListener(() =>
+                // Show recipe details when button is clicked
+                recipeDetailsContainer.SetActive(true);
+                var detailsText = recipeDetailsContainer.GetComponentInChildren<TextMeshProUGUI>();
+                if (detailsText != null)
                 {
-                    // Show recipe details when button is clicked
-                    recipeDetailsContainer.SetActive(true);
-                    var detailsText = recipeDetailsContainer.GetComponentInChildren<TextMeshProUGUI>();
-                    if (detailsText != null)
-                    {
-                        detailsText.text = $"{string.Join("\n ", recipe.ingredients)}";
-                    }
-                });
-            }
+                    detailsText.text = $"{string.Join("\n ", recipe.ingredients)}";
+                }
+            });
         }
     }
-    public void ResetToPickIngredient()
+}
+public void ResetToPickIngredient()
+{
+    // Clear all ingredients and add Espresso back
+    addedIngredients.Clear();
+    if (liquidController != null)
+        liquidController.ResetCup();
+    
+    // Destroy all recipe button children
+    if (recipeSuggestionContent != null)
     {
-        // Clear all ingredients and add Espresso back
-        addedIngredients.Clear();
-        if (liquidController != null)
-            liquidController.ResetCup();
-        HideAllPanels();
-        AddEspresso();
+        foreach (Transform child in recipeSuggestionContent.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
+    
+    // Clear recipe details text and hide container
+    if (recipeDetailsContainer != null)
+    {
+        recipeDetailsContainer.SetActive(false);
+        var detailsText = recipeDetailsContainer.GetComponentInChildren<TextMeshProUGUI>();
+        if (detailsText != null)
+        {
+            detailsText.text = "";
+        }
+    }
+    
+    // Hide reset button and not found text
+    if (resetButton != null) resetButton.SetActive(false);
+    if (notFoundText != null) notFoundText.SetActive(false);
+    
+    HideAllPanels();
+    AddEspresso();
+}
     public void GoHomePanel()
     {
         // Reset detection and state variables

@@ -15,11 +15,14 @@ public class LiquidController : MonoBehaviour
     [Header("Recipe Data")]
     public TextAsset recipeJsonFile;
     
-    [HideInInspector] public List<string> coreIngredients = new List<string>();
+    [HideInInspector] public List<Ingredient> ingredients = new List<Ingredient>();
     private List<Recipe> recipes = new List<Recipe>();
-    private List<string> ingredientsAdded = new List<string>(); // Changed to List to maintain order
+    private List<string> ingredientsAdded = new List<string>();
     private bool isAnimating = false;
     private string currentRecipeName = "None";
+    
+    // Dictionary for fast color lookup
+    private Dictionary<string, Color> ingredientColors = new Dictionary<string, Color>();
     
     void Start()
     {
@@ -45,8 +48,15 @@ public class LiquidController : MonoBehaviour
         try
         {
             RecipeList recipeList = JsonUtility.FromJson<RecipeList>(recipeJsonFile.text);
-            coreIngredients = recipeList.coreIngredients;
+            ingredients = recipeList.ingredients;
             recipes = recipeList.recipes;
+            
+            // Build color lookup dictionary
+            ingredientColors.Clear();
+            foreach (var ingredient in ingredients)
+            {
+                ingredientColors[ingredient.name] = ingredient.color.ToColor();
+            }
         }
         catch (System.Exception e)
         {
@@ -63,7 +73,6 @@ public class LiquidController : MonoBehaviour
     {
         if (isAnimating) return;
         
-        // Don't add duplicate ingredients
         if (!ingredientsAdded.Contains(ingredientName))
         {
             ingredientsAdded.Add(ingredientName);
@@ -113,28 +122,25 @@ public class LiquidController : MonoBehaviour
             return Color.clear;
         }
         
-        int ingredientCount = ingredientsAdded.Count;
+        // Blend colors from all added ingredients
+        Color blendedColor = BlendIngredientColors(ingredientsAdded);
         
-        // Find recipes that match the current ingredient count
+        // Check if this matches a known recipe
+        int ingredientCount = ingredientsAdded.Count;
         List<Recipe> matchingRecipes = recipes.FindAll(r => r.ingredients.Count == ingredientCount);
         
-        // Check for exact match with current ingredients
         foreach (Recipe recipe in matchingRecipes)
         {
-            // Check if all recipe ingredients are in our added ingredients (order doesn't matter)
             bool allMatch = recipe.ingredients.All(ing => ingredientsAdded.Contains(ing));
             
             if (allMatch)
             {
                 currentRecipeName = recipe.name;
-                return recipe.color.ToColor();
+                return blendedColor;
             }
         }
         
-        // No exact match found for current ingredient count
-        currentRecipeName = "Custom Mix (" + ingredientCount + " ingredients)";
-        
-        // Fallback: try to find a recipe with fewer ingredients that matches what we have
+        // Check for partial match
         for (int i = ingredientCount - 1; i >= 1; i--)
         {
             List<Recipe> smallerRecipes = recipes.FindAll(r => r.ingredients.Count == i);
@@ -146,13 +152,39 @@ public class LiquidController : MonoBehaviour
                 if (allMatch)
                 {
                     currentRecipeName = recipe.name + " + extras";
-                    return recipe.color.ToColor();
+                    return blendedColor;
                 }
             }
         }
         
-        // Ultimate fallback - return a neutral color
-        return new Color(0.8f, 0.7f, 0.6f);
+        currentRecipeName = "Custom Mix (" + ingredientCount + " ingredients)";
+        return blendedColor;
+    }
+    
+    private Color BlendIngredientColors(List<string> ingredientNames)
+    {
+        if (ingredientNames.Count == 0)
+            return Color.clear;
+        
+        float r = 0f, g = 0f, b = 0f;
+        int count = 0;
+        
+        foreach (string ingredientName in ingredientNames)
+        {
+            if (ingredientColors.ContainsKey(ingredientName))
+            {
+                Color color = ingredientColors[ingredientName];
+                r += color.r;
+                g += color.g;
+                b += color.b;
+                count++;
+            }
+        }
+        
+        if (count == 0)
+            return new Color(0.8f, 0.7f, 0.6f); // Fallback
+        
+        return new Color(r / count, g / count, b / count);
     }
     
     [ContextMenu("Reset Cup")]
@@ -176,16 +208,16 @@ public class LiquidControllerEditor : UnityEditor.Editor
         DrawDefaultInspector();
         LiquidController controller = (LiquidController)target;
         
-        if (controller.recipeJsonFile != null && controller.coreIngredients.Count > 0)
+        if (controller.recipeJsonFile != null && controller.ingredients.Count > 0)
         {
             UnityEditor.EditorGUILayout.Space(10);
             UnityEditor.EditorGUILayout.LabelField("Add Ingredients", UnityEditor.EditorStyles.boldLabel);
             
-            foreach (var ingredient in controller.coreIngredients)
+            foreach (var ingredient in controller.ingredients)
             {
-                if (GUILayout.Button("Add " + ingredient))
+                if (GUILayout.Button("Add " + ingredient.name))
                 {
-                    controller.FillIngredient(ingredient);
+                    controller.FillIngredient(ingredient.name);
                 }
             }
             

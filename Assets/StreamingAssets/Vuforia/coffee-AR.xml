@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig>
   <Tracking>
-    <ImageTarget name="coffe-cup" size="0.050000 0.050000" />
-    <ImageTarget name="cinnamon" size="0.050000 0.050000" />
-    <ImageTarget name="whipped_cream" size="0.050000 0.050000" />
-    <ImageTarget name="pumkin" size="0.050000 0.050000" />
-    <ImageTarget name="choco_syrup" size="0.050000 0.050000" />
-    <ImageTarget name="caramel" size="0.050000 0.050000" />
-    <ImageTarget name="vanilla" size="0.050000 0.050000" />
-    <ImageTarget name="ice" size="0.050000 0.050000" />
-    <ImageTarget name="frothed-milk" size="0.050000 0.050000" />
-    <ImageTarget name="steamed_milk" size="0.050000 0.050000" />
-    <ImageTarget name="espresso" size="0.050000 0.050000" />
-    <ImageTarget name="hot_water" size="0.050000 0.050000" />
-    <ImageTarget name="generated" size="0.063000 0.047250" />
+    <ImageTarget name="milk" size="0.052000 0.052000" />
+    <ImageTarget name="coffe-cup" size="0.052000 0.052000" />
+    <ImageTarget name="vanilla" size="0.052000 0.052000" />
+    <ImageTarget name="steamed_milk" size="0.052000 0.052000" />
+    <ImageTarget name="pumpkin" size="0.052000 0.051665" />
+    <ImageTarget name="icecube" size="0.052000 0.052000" />
+    <ImageTarget name="hot_water" size="0.052000 0.052000" />
+    <ImageTarget name="espresso" size="0.052000 0.052000" />
+    <ImageTarget name="whipped_cream" size="0.052000 0.052000" />
+    <ImageTarget name="cinnamon" size="0.052000 0.052000" />
+    <ImageTarget name="choco_syrup" size="0.052000 0.052000" />
+    <ImageTarget name="caramel" size="0.052000 0.052000" />
   </Tracking>
 </QCARConfig>
