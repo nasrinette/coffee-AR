@@ -1,34 +1,43 @@
 # Coffee AR
 
-Coffee AR is an augmented-reality learning app for coffee making.
-It uses **marker-based tracking** (Vuforia) and **Unity shaders** to let users assemble virtual coffee drinks by scanning tangible ingredient markers.
+An interactive Augmented Reality application for learning coffee making through tangible interaction. Built with Unity and Vuforia, Coffee AR allows users to explore coffee recipes by physically manipulating ingredient markers and observing real-time visual feedback in a virtual cup.
 
-Here is the link to view the demo video: https://drive.google.com/file/d/1wT8bo7tSmTPxhe2eRuDPwyedyzTEf87G/view?usp=sharing
+## Features
 
-## Dependencies
+- Marker-based AR tracking with Vuforia
+- Real-time liquid simulation with custom shaders
+- Adaptive recipe suggestions based on added ingredients
+- Tangible interaction using physical ingredient cubes
 
-- **Unity 2021+**
-- **Vuforia Engine (marker tracking)**
-- **TextMeshPro** for UI
+## Technologies
 
----
+- Unity 2022.3 LTS
+- Vuforia Engine SDK
+- C# scripting
+- Custom Shader Graph
 
-## Setup
+## Installation
 
-1. Clone the repo.
-2. Open the project in Unity.
-3. Import Vuforia Engine package from Unity Package Manager.
-4. Place your image targets (markers) in `Assets/StreamingAssets/QCAR/`.
-5. Assign markers to `CupController` and ingredient prefabs.
-6. Add your custom recipes to `recipes.json`.
-7. Build to Android or iOS.
+Clone the repository and open in Unity Editor:
 
----
+```bash
+git clone https://github.com/nasrinette/coffee-AR
+```
 
-## Typical Flow
+The Vuforia SDK will be automatically resolved. Test using the Play button or build for iOS/Android.
 
-1. App detects **cup marker**.
-2. User moves **ingredient markers** close to the cup.
-3. The system registers added ingredients → updates shader.
-4. System suggests recipes dynamically.
-5. UI displays recommended drinks and visuals.
+**Pre-built APK**: [Download for Android](https://drive.google.com/drive/folders/1GKpmWkzEjKexhFln-NDzzg79aymtrXRJ?usp=sharing)
+
+## How to Use
+
+1. Scan the coffee cup marker
+2. Add espresso base by scanning the espresso card
+3. Bring ingredient cards close to the cup to add them
+4. View dynamic recipe suggestions based on your ingredients
+
+## Demo
+
+[Watch demonstration video](https://drive.google.com/file/d/1yRwFulWG5EZRmiMBVpJYy93bDYVRWUkn/view?usp=sharing)
+
+## Authors
+Nasirova Nazrin, Bassal Dimah, Maris Clara
