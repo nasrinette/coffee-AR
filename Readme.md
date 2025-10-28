@@ -40,4 +40,5 @@ The Vuforia SDK will be automatically resolved. Test using the Play button or bu
 [Watch demonstration video](https://drive.google.com/file/d/1yRwFulWG5EZRmiMBVpJYy93bDYVRWUkn/view?usp=sharing)
 
 ## Authors
+
 Nasirova Nazrin, Bassal Dimah, Maris Clara
