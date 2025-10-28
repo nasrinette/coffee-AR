@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
 
 
     [Header("Distance Settings")]
-    [SerializeField] private float addIngredientThreshold = 0.25f; // Distance in meters (15cm)
+    [SerializeField] private float addIngredientThreshold = 0.25f; // Distance in meters
 
     // Boolean to track detections
     private bool isCoffeeCupDetected = false;
@@ -42,9 +42,7 @@ public class UIManager : MonoBehaviour
     // List of added ingredients
     private List<string> addedIngredients = new List<string>();
 
-    public bool IsCoffeeCupDetected => isCoffeeCupDetected;
-    public bool IsEspressoDetected => isEspressoDetected;
-    public List<string> AddedIngredients => addedIngredients;
+
 
     [Header("Other Settings")]
     public LiquidController liquidController; // set in inspector
@@ -110,14 +108,9 @@ public class UIManager : MonoBehaviour
         {
             CheckIngredientDistance(espressoTarget);
         }
-        //my code
+        
         if(addedIngredients.Count >= 1)
         {
-            // Check distance for all other ingredients (assuming they are also ObserverBehaviours in the scene)
-            //check if they're found and it cant be AR camera       
-            
-
-
             var allTargets = FindObjectsOfType<ObserverBehaviour>();
             foreach (var target in allTargets)
             {
@@ -127,8 +120,6 @@ public class UIManager : MonoBehaviour
                 // Only check if the target is tracked or extended tracked
                 if (target.TargetStatus.Status == Status.TRACKED || target.TargetStatus.Status == Status.EXTENDED_TRACKED)
                 {
-                    //Debug.Log($"Checking distance for target: {target.TargetName}");
-                    // Assuming other targets represent different ingredients
                     CheckIngredientDistance(target);
                 }
             }
@@ -226,10 +217,6 @@ public class UIManager : MonoBehaviour
     {
         isCoffeeCupDetected = true;
         
-        // Log that target is found
-        Debug.Log("Coffee Cup Target FOUND!");
-        
-        // Log position
         Vector3 position = coffeeCupTarget.transform.position;
         Debug.Log($"Coffee Cup Position: {position}");
         
@@ -278,11 +265,6 @@ public class UIManager : MonoBehaviour
     private void OnEspressoFound()
     {
         isEspressoDetected = true;
-        
-        // Log that target is found
-        Debug.Log("Espresso Target FOUND!");
-        
-        // Log position
         Vector3 position = espressoTarget.transform.position;
         Debug.Log($"Espresso Position: {position}");
 
@@ -296,14 +278,10 @@ public class UIManager : MonoBehaviour
         isEspressoDetected = false;
         
         Debug.Log("Espresso Target LOST!");
-
-        // Stay in Add Espresso Panel (no panel change)
     }
 
+
     // ===== INGREDIENT DISTANCE CHECKING =====
-
-
-    //my code: added target
     private Dictionary<string, string> markerToIngredient = new Dictionary<string, string>
 {
     { "cinnamon", "Cinnamon" },
@@ -332,7 +310,6 @@ public class UIManager : MonoBehaviour
                 AddEspresso();
             else if (markerToIngredient.TryGetValue(target.TargetName, out string ingredientName) && !addedIngredients.Contains(ingredientName))
             {
-                Debug.Log($"IMP Target Name: {target.TargetName} maps to Ingredient: {ingredientName}");
                 AddIngredient(ingredientName);
             }
             else
@@ -348,7 +325,7 @@ public class UIManager : MonoBehaviour
     {
         addedIngredients.Add(ingredient);
         Debug.Log($"ADDED to the cup! {string.Join(", ", ingredient)}");
-        Debug.Log($"IMP Current Ingredients: {string.Join(", ", addedIngredients)}");
+        Debug.Log($"Current Ingredients: {string.Join(", ", addedIngredients)}");
         liquidController.FillIngredient(ingredient);
         if (ingredient!= "Espresso") SuggestRecipe();
 
@@ -489,23 +466,4 @@ public void ResetToPickIngredient()
     }
 
 
-    // ===== PUBLIC HELPER METHODS =====
-
-    // Public method to check if cup is currently detected
-    public bool IsCupInView()
-    {
-        return isCoffeeCupDetected;
-    }
-
-    // Public method to check if espresso is currently detected
-    public bool IsEspressoInView()
-    {
-        return isEspressoDetected;
-    }
-
-    // Public method to get the list of added ingredients
-    public void PrintAddedIngredients()
-    {
-        Debug.Log($"Added Ingredients ({addedIngredients.Count}): {string.Join(", ", addedIngredients)}");
-    }
 }

@@ -1,0 +1,34 @@
+# Coffee AR
+
+Coffee AR is an augmented-reality learning app for coffee making.
+It uses **marker-based tracking** (Vuforia) and **Unity shaders** to let users assemble virtual coffee drinks by scanning tangible ingredient markers.
+
+Here is the link to view the demo video: https://drive.google.com/file/d/1wT8bo7tSmTPxhe2eRuDPwyedyzTEf87G/view?usp=sharing
+
+## Dependencies
+
+- **Unity 2021+**
+- **Vuforia Engine (marker tracking)**
+- **TextMeshPro** for UI
+
+---
+
+## Setup
+
+1. Clone the repo.
+2. Open the project in Unity.
+3. Import Vuforia Engine package from Unity Package Manager.
+4. Place your image targets (markers) in `Assets/StreamingAssets/QCAR/`.
+5. Assign markers to `CupController` and ingredient prefabs.
+6. Add your custom recipes to `recipes.json`.
+7. Build to Android or iOS.
+
+---
+
+## Typical Flow
+
+1. App detects **cup marker**.
+2. User moves **ingredient markers** close to the cup.
+3. The system registers added ingredients → updates shader.
+4. System suggests recipes dynamically.
+5. UI displays recommended drinks and visuals.
