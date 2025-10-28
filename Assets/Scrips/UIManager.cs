@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using Vuforia;
 using UnityEngine.UI;
 using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    // Singleton instance
     public static UIManager Instance { get; private set; }
 
     [Header("UI Panels")]
@@ -17,46 +15,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject pickIngredientPanel;
     [SerializeField] private GameObject suggestionsPanel;
 
-    [Header("Vuforia Targets")]
-    [SerializeField] private ObserverBehaviour coffeeCupTarget;
-    [SerializeField] private ObserverBehaviour espressoTarget;
-    [SerializeField] private ObserverBehaviour creamTarget;
-    [SerializeField] private ObserverBehaviour milkTarget;
-    [SerializeField] private ObserverBehaviour iceTarget;
-    [SerializeField] private ObserverBehaviour pumkinTarget;
-    [SerializeField] private ObserverBehaviour chocolateTarget;
-    [SerializeField] private ObserverBehaviour vanillaTarget;
-    [SerializeField] private ObserverBehaviour caramelTarget;
-    [SerializeField] private ObserverBehaviour cinnamonTarget;
-    
-
-
-    [Header("Distance Settings")]
-    [SerializeField] private float addIngredientThreshold = 0.25f; // Distance in meters
-
-    // Boolean to track detections
-    private bool isCoffeeCupDetected = false;
-    private bool isEspressoDetected = false;
-    private bool isEspressoAdded = false;
-
-    // List of added ingredients
-    private List<string> addedIngredients = new List<string>();
-
-
-
-    [Header("Other Settings")]
-    public LiquidController liquidController; // set in inspector
-
-    public GameObject recipeSuggestionContent;
-    public GameObject recipeButtonPrefab;
-
-    public GameObject recipeDetailsContainer;
-
+    [Header("Recipe UI")]
+    [SerializeField] private GameObject recipeSuggestionContent;
+    [SerializeField] private GameObject recipeButtonPrefab;
+    [SerializeField] private GameObject recipeDetailsContainer;
     [SerializeField] private GameObject resetButton;
     [SerializeField] private GameObject notFoundText;
 
-
-
+    [Header("References")]
+    [SerializeField] private VuforiaIngredientTracker ingredientTracker;
 
     private void Awake()
     {
@@ -77,111 +44,110 @@ public class UIManager : MonoBehaviour
         // Show only the home panel at start
         ShowHomePanel();
 
-        // Enable multiple target tracking
-        VuforiaConfiguration.Instance.Vuforia.MaxSimultaneousImageTargets = 2;
-
-        // Register Vuforia event handlers for coffee cup
-        if (coffeeCupTarget != null)
+        // Subscribe to ingredient tracker events
+        if (ingredientTracker != null)
         {
-            coffeeCupTarget.OnTargetStatusChanged += OnCoffeeCupStatusChanged;
+            ingredientTracker.OnCoffeeCupFound += HandleCoffeeCupFound;
+            ingredientTracker.OnCoffeeCupLost += HandleCoffeeCupLost;
+            ingredientTracker.OnEspressoAddedToCup += HandleEspressoAdded;
+            ingredientTracker.OnRecipeSuggestionUpdate += HandleRecipeSuggestions;
         }
         else
         {
-            Debug.LogError("Coffee Cup Target is not assigned!");
-        }
-
-        // Register Vuforia event handlers for espresso
-        if (espressoTarget != null)
-        {
-            espressoTarget.OnTargetStatusChanged += OnEspressoStatusChanged;
-        }
-        else
-        {
-            Debug.LogError("Espresso Target is not assigned!");
-        }
-    }
-
-    private void Update()
-    {
-        // Check distance between coffee cup and espresso when both are detected
-        if (isCoffeeCupDetected && isEspressoDetected && !isEspressoAdded && addEspressoPanel.activeSelf)
-        {
-            CheckIngredientDistance(espressoTarget);
-        }
-        
-        if(addedIngredients.Count >= 1)
-        {
-            var allTargets = FindObjectsOfType<ObserverBehaviour>();
-            foreach (var target in allTargets)
-            {
-                if (target == coffeeCupTarget || target == espressoTarget || target.TargetName== "ARCamera"|| target.TargetName== "DeviceObserver")
-                    continue; // skip cup and espresso and other non-ingredient targets
-
-                // Only check if the target is tracked or extended tracked
-                if (target.TargetStatus.Status == Status.TRACKED || target.TargetStatus.Status == Status.EXTENDED_TRACKED)
-                {
-                    CheckIngredientDistance(target);
-                }
-            }
+            Debug.LogError("VuforiaIngredientTracker is not assigned!");
         }
     }
 
     private void OnDestroy()
     {
-        // Unregister event handlers when destroyed
-        if (coffeeCupTarget != null)
+        // Unsubscribe from events
+        if (ingredientTracker != null)
         {
-            coffeeCupTarget.OnTargetStatusChanged -= OnCoffeeCupStatusChanged;
-        }
-        if (espressoTarget != null)
-        {
-            espressoTarget.OnTargetStatusChanged -= OnEspressoStatusChanged;
+            ingredientTracker.OnCoffeeCupFound -= HandleCoffeeCupFound;
+            ingredientTracker.OnCoffeeCupLost -= HandleCoffeeCupLost;
+            ingredientTracker.OnEspressoAddedToCup -= HandleEspressoAdded;
+            ingredientTracker.OnRecipeSuggestionUpdate -= HandleRecipeSuggestions;
         }
     }
 
     // ===== UI PANEL MANAGEMENT =====
 
-    // Show Home Panel
     public void ShowHomePanel()
     {
         HideAllPanels();
         homePanel.SetActive(true);
+        
+        // Disable all tracking when on home panel
+        if (ingredientTracker != null)
+        {
+            ingredientTracker.EnableCoffeeCupTracking(false);
+            ingredientTracker.EnableEspressoTracking(false);
+            ingredientTracker.EnableIngredientTracking(false);
+        }
     }
 
-    // Open Instructions Panel (called from Instructions button on Home Panel)
     public void OpenInstructionsPanel()
     {
         HideAllPanels();
         instructionPanel.SetActive(true);
     }
 
-    // Open Scan Cup Panel (called from Start button on Instructions Panel)
     public void OpenScanCupPanel()
     {
         HideAllPanels();
         scanCupPanel.SetActive(true);
+        
+        // Enable coffee cup tracking
+        if (ingredientTracker != null)
+        {
+            ingredientTracker.EnableCoffeeCupTracking(true);
+            ingredientTracker.EnableEspressoTracking(false);
+            ingredientTracker.EnableIngredientTracking(false);
+        }
     }
 
-    // Open Add Espresso Panel (will be called after cup is scanned)
     public void OpenAddEspressoPanel()
     {
         HideAllPanels();
         addEspressoPanel.SetActive(true);
+        
+        // Enable both coffee cup and espresso tracking
+        if (ingredientTracker != null)
+        {
+            ingredientTracker.EnableCoffeeCupTracking(true);
+            ingredientTracker.EnableEspressoTracking(true);
+            ingredientTracker.EnableIngredientTracking(false);
+        }
     }
 
-    // Open Pick Ingredient Panel (called after ingredient is added)
     public void OpenPickIngredientPanel()
     {
         HideAllPanels();
         pickIngredientPanel.SetActive(true);
+        
+        // Enable ingredient tracking
+        if (ingredientTracker != null)
+        {
+            ingredientTracker.EnableCoffeeCupTracking(true);
+            ingredientTracker.EnableEspressoTracking(false);
+            ingredientTracker.EnableIngredientTracking(true);
+        }
     }
-    public void OpenSuggesttionsPanel()
+
+    public void OpenSuggestionsPanel()
     {
         HideAllPanels();
         suggestionsPanel.SetActive(true);
+        
+        // Keep ingredient tracking enabled
+        if (ingredientTracker != null)
+        {
+            ingredientTracker.EnableCoffeeCupTracking(true);
+            ingredientTracker.EnableEspressoTracking(false);
+            ingredientTracker.EnableIngredientTracking(true);
+        }
     }
 
-    // Helper method to hide all panels
     private void HideAllPanels()
     {
         homePanel.SetActive(false);
@@ -192,34 +158,10 @@ public class UIManager : MonoBehaviour
         suggestionsPanel.SetActive(false);
     }
 
-    // ===== VUFORIA COFFEE CUP TRACKING =====
+    // ===== EVENT HANDLERS FROM VUFORIA TRACKER =====
 
-    // Called when coffee cup target tracking status changes
-    private void OnCoffeeCupStatusChanged(ObserverBehaviour behaviour, TargetStatus targetStatus)
+    private void HandleCoffeeCupFound()
     {
-        // Only track when scan cup panel or add espresso panel is active
-        if (!scanCupPanel.activeSelf && !addEspressoPanel.activeSelf)
-            return;
-
-        if (targetStatus.Status == Status.TRACKED || 
-            targetStatus.Status == Status.EXTENDED_TRACKED)
-        {
-            OnCoffeeCupFound();
-        }
-        else
-        {
-            OnCoffeeCupLost();
-        }
-    }
-
-    // Called when coffee cup target is found and tracked
-    private void OnCoffeeCupFound()
-    {
-        isCoffeeCupDetected = true;
-        
-        Vector3 position = coffeeCupTarget.transform.position;
-        Debug.Log($"Coffee Cup Position: {position}");
-        
         // Switch to Add Espresso Panel if currently in Scan Cup Panel
         if (scanCupPanel.activeSelf)
         {
@@ -227,243 +169,144 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // Called when coffee cup target is lost
-    private void OnCoffeeCupLost()
+    private void HandleCoffeeCupLost()
     {
-        isCoffeeCupDetected = false;
-        
-        Debug.Log("Coffee Cup Target LOST!");
-        
-        // Switch back to Scan Cup Panel only if in Add Espresso Panel and espresso not added yet
-        if (addEspressoPanel.activeSelf && !isEspressoAdded)
+        // Switch back to Scan Cup Panel only if in Add Espresso Panel
+        if (addEspressoPanel.activeSelf)
         {
             OpenScanCupPanel();
         }
     }
 
-    // ===== VUFORIA ESPRESSO TRACKING =====
-
-    // Called when espresso target tracking status changes
-    private void OnEspressoStatusChanged(ObserverBehaviour behaviour, TargetStatus targetStatus)
+    private void HandleEspressoAdded()
     {
-        // Only track when add espresso panel is active
-        if (!addEspressoPanel.activeSelf)
-            return;
+        // Switch to Pick Ingredient Panel
+        OpenPickIngredientPanel();
+    }
 
-        if (targetStatus.Status == Status.TRACKED || 
-            targetStatus.Status == Status.EXTENDED_TRACKED)
+    private void HandleRecipeSuggestions(List<Recipe> suggestedRecipes)
+    {
+        OpenSuggestionsPanel();
+        DisplayRecipeSuggestions(suggestedRecipes);
+    }
+
+    // ===== RECIPE SUGGESTION DISPLAY =====
+    private void DisplayRecipeSuggestions(List<Recipe> suggestedRecipes)
+    {
+        // Make sure recipe content is active
+        if (recipeSuggestionContent != null)
         {
-            OnEspressoFound();
+            recipeSuggestionContent.SetActive(true);
+        }
+
+        // Clear previous suggestions
+        if (recipeSuggestionContent != null)
+        {
+            foreach (Transform child in recipeSuggestionContent.transform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        // Check if no recipes found
+        if (suggestedRecipes.Count == 0)
+        {
+            if (resetButton != null) resetButton.SetActive(true);
+            if (notFoundText != null) notFoundText.SetActive(true);
+            if (recipeDetailsContainer != null) recipeDetailsContainer.SetActive(false);
+            return;
         }
         else
         {
-            OnEspressoLost();
+            // Hide reset button and not found text if previously shown
+            if (resetButton != null) resetButton.SetActive(false);
+            if (notFoundText != null) notFoundText.SetActive(false);
         }
-    }
 
-    // Called when espresso target is found and tracked
-    private void OnEspressoFound()
-    {
-        isEspressoDetected = true;
-        Vector3 position = espressoTarget.transform.position;
-        Debug.Log($"Espresso Position: {position}");
-
-        // Stay in Add Espresso Panel (no panel change)
-        Debug.Log("Both Coffee Cup and Espresso are now visible!");
-    }
-
-    // Called when espresso target is lost
-    private void OnEspressoLost()
-    {
-        isEspressoDetected = false;
-        
-        Debug.Log("Espresso Target LOST!");
-    }
-
-
-    // ===== INGREDIENT DISTANCE CHECKING =====
-    private Dictionary<string, string> markerToIngredient = new Dictionary<string, string>
-{
-    { "cinnamon", "Cinnamon" },
-    { "whipped_cream", "Whipped Cream" },
-    { "pumpkin", "Pumpkin Spice Syrup" },
-    { "choco_syrup", "Chocolate Syrup" },
-    { "caramel", "Caramel Syrup" },
-    { "vanilla", "Vanilla Syrup" },
-    { "ice", "Ice" },
-    { "milk", "Milk" },
-    { "steamed_milk", "Steamed Milk" },
-    { "hot_water", "Hot Water" }
-};
-
-    private void CheckIngredientDistance(ObserverBehaviour target)
-    {
-        // Calculate distance between coffee cup and espresso
-        float distance = Vector3.Distance(coffeeCupTarget.transform.position, target.transform.position);
-        
-        Debug.Log($"Distance between Cup and {target}: {distance:F3}m");
-
-        // Check if target is close enough to the cup
-        if (distance <= addIngredientThreshold)
+        // Create buttons for each suggested recipe
+        foreach (var recipe in suggestedRecipes)
         {
-            if(addedIngredients.Count == 0)
-                AddEspresso();
-            else if (markerToIngredient.TryGetValue(target.TargetName, out string ingredientName) && !addedIngredients.Contains(ingredientName))
+            GameObject buttonObj = Instantiate(recipeButtonPrefab, recipeSuggestionContent.transform);
+            buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = recipe.name;
+            
+            var button = buttonObj.GetComponent<Button>();
+            if (button != null)
             {
-                AddIngredient(ingredientName);
-            }
-            else
-            {
-                Debug.Log("Ingredient already exists or marker not mapped");
-            }
-
-
-
-        }
-    }
-    private void AddIngredient(string ingredient)
-    {
-        addedIngredients.Add(ingredient);
-        Debug.Log($"ADDED to the cup! {string.Join(", ", ingredient)}");
-        Debug.Log($"Current Ingredients: {string.Join(", ", addedIngredients)}");
-        liquidController.FillIngredient(ingredient);
-        if (ingredient!= "Espresso") SuggestRecipe();
-
-
-    }
-
-    private void AddEspresso() 
-    {   
-        isEspressoAdded = true;
-        AddIngredient("Espresso");
-        // Switch to Pick Ingredient Panel
-        OpenPickIngredientPanel();
-
-    }
-    private List<Recipe> IngredientsToRecipes()
-    {
-        List<Recipe> suggestionRecipeList = new List<Recipe>();
-        var recipes = liquidController.getRecipes();
-
-        foreach (var recipe in recipes)
-        {
-            // Only suggest recipes that contain ALL current ingredients
-            bool allMatch = true;
-            foreach (var ingredient in addedIngredients)
-            {
-                if (!recipe.ingredients.Contains(ingredient))
+                button.onClick.AddListener(() =>
                 {
-                    allMatch = false;
-                    break;
-                }
-            }
-            if (allMatch)
-            {
-                suggestionRecipeList.Add(recipe);
+                    ShowRecipeDetails(recipe);
+                });
             }
         }
-        return suggestionRecipeList;
     }
 
-    private void SuggestRecipe()
-{
-    OpenSuggesttionsPanel();
-
-    // Make sure recipe content is active
-    if (recipeSuggestionContent != null)
+    private void ShowRecipeDetails(Recipe recipe)
     {
-        recipeSuggestionContent.SetActive(true);
+        if (recipeDetailsContainer != null)
+        {
+            recipeDetailsContainer.SetActive(true);
+            var detailsText = recipeDetailsContainer.GetComponentInChildren<TextMeshProUGUI>();
+            if (detailsText != null)
+            {
+                detailsText.text = $"{string.Join("\n ", recipe.ingredients)}";
+            }
+        }
     }
 
-    // Suggest recipes based on current ingredients
-    var suggestedRecipes = IngredientsToRecipes();
+    // ===== BUTTON ACTIONS =====
 
-    recipeSuggestionContent.transform.DetachChildren(); // Clear previous suggestions
-
-    if (suggestedRecipes.Count == 0)
+    public void ResetToPickIngredient()
     {
-        if (resetButton != null) resetButton.SetActive(true);
-        if (notFoundText != null) notFoundText.SetActive(true);
-        if (recipeDetailsContainer != null) recipeDetailsContainer.SetActive(false);
+        // Reset tracking state
+        if (ingredientTracker != null)
+        {
+            ingredientTracker.ResetToEspressoAdded();
+        }
 
-        return;
+        // Clear recipe UI
+        ClearRecipeSuggestions();
+        
     }
-    else
+
+    public void GoHomePanel()
     {
-        // Hide reset button and not found text if previously shown
+        // Reset tracking state
+        if (ingredientTracker != null)
+        {
+            ingredientTracker.ResetTracking();
+        }
+
+        // Clear recipe UI
+        ClearRecipeSuggestions();
+
+        // Show home panel
+        ShowHomePanel();
+    }
+
+    private void ClearRecipeSuggestions()
+    {
+        // Destroy all recipe button children
+        if (recipeSuggestionContent != null)
+        {
+            foreach (Transform child in recipeSuggestionContent.transform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        // Clear recipe details text and hide container
+        if (recipeDetailsContainer != null)
+        {
+            recipeDetailsContainer.SetActive(false);
+            var detailsText = recipeDetailsContainer.GetComponentInChildren<TextMeshProUGUI>();
+            if (detailsText != null)
+            {
+                detailsText.text = "";
+            }
+        }
+
+        // Hide reset button and not found text
         if (resetButton != null) resetButton.SetActive(false);
         if (notFoundText != null) notFoundText.SetActive(false);
     }
-
-    foreach (var recipe in suggestedRecipes)
-    {
-        GameObject buttonObj = Instantiate(recipeButtonPrefab, recipeSuggestionContent.transform);
-        buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = recipe.name;
-        var button = buttonObj.GetComponent<Button>();
-        if (button != null)
-        {
-            button.onClick.AddListener(() =>
-            {
-                // Show recipe details when button is clicked
-                recipeDetailsContainer.SetActive(true);
-                var detailsText = recipeDetailsContainer.GetComponentInChildren<TextMeshProUGUI>();
-                if (detailsText != null)
-                {
-                    detailsText.text = $"{string.Join("\n ", recipe.ingredients)}";
-                }
-            });
-        }
-    }
-}
-public void ResetToPickIngredient()
-{
-    // Clear all ingredients and add Espresso back
-    addedIngredients.Clear();
-    if (liquidController != null)
-        liquidController.ResetCup();
-    
-    // Destroy all recipe button children
-    if (recipeSuggestionContent != null)
-    {
-        foreach (Transform child in recipeSuggestionContent.transform)
-        {
-            Destroy(child.gameObject);
-        }
-    }
-    
-    // Clear recipe details text and hide container
-    if (recipeDetailsContainer != null)
-    {
-        recipeDetailsContainer.SetActive(false);
-        var detailsText = recipeDetailsContainer.GetComponentInChildren<TextMeshProUGUI>();
-        if (detailsText != null)
-        {
-            detailsText.text = "";
-        }
-    }
-    
-    // Hide reset button and not found text
-    if (resetButton != null) resetButton.SetActive(false);
-    if (notFoundText != null) notFoundText.SetActive(false);
-    
-    HideAllPanels();
-    AddEspresso();
-}
-    public void GoHomePanel()
-    {
-        // Reset detection and state variables
-        isEspressoAdded = false;
-        addedIngredients.Clear();
-
-        // Reset cup contents and visuals
-        if (liquidController != null)
-            liquidController.ResetCup();
-
-        // Hide all panels and show home panel
-        HideAllPanels();
-        homePanel.SetActive(true);
-
-    }
-
-
 }

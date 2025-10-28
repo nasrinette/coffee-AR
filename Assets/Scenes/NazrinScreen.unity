@@ -8045,7 +8045,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -174, y: -113.9}
+  m_AnchoredPosition: {x: -174, y: -113.8999}
   m_SizeDelta: {x: 300, y: 68.319}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1528574465
@@ -8472,23 +8472,12 @@ MonoBehaviour:
   addEspressoPanel: {fileID: 1527071224}
   pickIngredientPanel: {fileID: 225967531}
   suggestionsPanel: {fileID: 1130123667}
-  coffeeCupTarget: {fileID: 231740183}
-  espressoTarget: {fileID: 1069973582}
-  creamTarget: {fileID: 1892168863}
-  milkTarget: {fileID: 1146255727}
-  iceTarget: {fileID: 177738608}
-  pumkinTarget: {fileID: 1405214902}
-  chocolateTarget: {fileID: 348859289}
-  vanillaTarget: {fileID: 80731324}
-  caramelTarget: {fileID: 1803460241}
-  cinnamonTarget: {fileID: 1482123495}
-  addIngredientThreshold: 0.05
-  liquidController: {fileID: 481186668}
   recipeSuggestionContent: {fileID: 1201219288}
   recipeButtonPrefab: {fileID: 2369721556261775398, guid: b831375c9652cf244a4ec632e6556d1b, type: 3}
   recipeDetailsContainer: {fileID: 1433202783}
   resetButton: {fileID: 1071102097}
   notFoundText: {fileID: 1285244886}
+  ingredientTracker: {fileID: 2009375999}
 --- !u!4 &1716748458
 Transform:
   m_ObjectHideFlags: 0
@@ -9523,6 +9512,62 @@ Transform:
   - {fileID: 177738605}
   m_Father: {fileID: 1650346326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2009375998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2009376000}
+  - component: {fileID: 2009375999}
+  m_Layer: 0
+  m_Name: IngredientTracker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2009375999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009375998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 795659f6eeb876949a7f9a1a2da5bfe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coffeeCupTarget: {fileID: 231740183}
+  espressoTarget: {fileID: 1069973582}
+  creamTarget: {fileID: 1892168863}
+  milkTarget: {fileID: 322652693}
+  iceTarget: {fileID: 177738608}
+  pumkinTarget: {fileID: 1405214902}
+  chocolateTarget: {fileID: 348859289}
+  vanillaTarget: {fileID: 80731324}
+  caramelTarget: {fileID: 1803460241}
+  cinnamonTarget: {fileID: 1482123495}
+  addIngredientThreshold: 0.08
+  liquidController: {fileID: 481186668}
+--- !u!4 &2009376000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009375998}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.02380902, y: 0.035568655, z: 0.007167056}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2012071676
 GameObject:
   m_ObjectHideFlags: 0
@@ -10237,4 +10282,5 @@ SceneRoots:
   - {fileID: 1038603384}
   - {fileID: 1827606939}
   - {fileID: 1716748458}
+  - {fileID: 2009376000}
   - {fileID: 1650346326}
